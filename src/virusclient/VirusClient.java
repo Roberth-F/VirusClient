@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import virusclient.util.ServerComunicator;
 
 /**
  *
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 public class VirusClient extends Application {
     
     @Override
+    @SuppressWarnings("Convert2Lambda")
     public void start(Stage primaryStage) {
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
@@ -27,7 +29,9 @@ public class VirusClient extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                //System.out.println("Hello World!");
+                ServerComunicator serv = new ServerComunicator();
+                serv.enviar("Holaaa");
             }
         });
         StackPane root = new StackPane();
