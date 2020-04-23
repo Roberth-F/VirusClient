@@ -5,6 +5,7 @@
  */
 package virusclient.util;
 
+import com.google.gson.Gson;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,7 +27,10 @@ public class ServerComunicator {
             Socket canalComunicacion = new Socket("192.168.1.5", 7777);
             DataOutputStream datos = new DataOutputStream(canalComunicacion.getOutputStream());
             String mensaje = "Hola Mundo!\n";
-            datos.writeUTF(mensaje);
+            clasePrueba prueba = new clasePrueba();
+            Gson gs = new Gson();
+            String send = gs.toJson(prueba);
+            datos.writeUTF(send);
             canalComunicacion.getOutputStream().close();
             datos.close();
             canalComunicacion.close();
