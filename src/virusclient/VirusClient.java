@@ -12,7 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import virusclient.util.ServerComunicator;
+import virusclient.util.ComunicadorConRespuesta;
+import virusclient.util.Respuesta;
 
 /**
  *
@@ -30,8 +31,9 @@ public class VirusClient extends Application {
             @Override
             public void handle(ActionEvent event) {
                 //System.out.println("Hello World!");
-                ServerComunicator serv = new ServerComunicator();
-                serv.enviar("Holaaa");
+                ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
+                Respuesta resp = serv.crearNuevaPartida(9999, "Roberth");
+                System.out.println(resp.getEstado());
             }
         });
         StackPane root = new StackPane();

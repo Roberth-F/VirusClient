@@ -30,6 +30,8 @@ public class Peticion {
     private int puerto;             //Puerto en el está escuchando cliente.
     @SerializedName("jugador")
     private String nombreJugador;   //Campo solo nesesario cuando se va a unir o crear partida.
+    @SerializedName("puertoImediato")
+    private int puertoImadiato;  //En caso de ser petición con respuesta a este puerto se envia la respuerta.
 
     public Peticion() {
     }
@@ -44,8 +46,10 @@ public class Peticion {
      * variar a lo largo del juego o se perderá la conexión).
      * @param nombreJugador Nombre del jugador que desea inscribirse en la
      * partida.
+     * @param puertoImediato Puerto al de cliente al que se le enviará de
+     * imadiato la respuesta de si puede o no unirse a la partida.
      */
-    public void toStartGame(String ServMethod, int puertoEspera, String nombreJugador) {
+    public void toStartGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato) {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException UE) {
@@ -55,6 +59,7 @@ public class Peticion {
         this.puerto = puertoEspera;
         this.metodo = ServMethod;
         this.nombreJugador = nombreJugador;
+        this.puertoImadiato = puertoImediato;
     }
 
     /**
