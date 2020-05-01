@@ -13,7 +13,7 @@ and open the template in the editor.
     -fx-image:url("../resources/virusFondo.jpg");
 }
 #imgAvatar{
-   -fx-image: url("../resources/imagenesAvatar/avatar1.png");
+   -fx-image: url("../resources/imagenesAvatar/robot.png");
 }
 #imgFondoRegistro{
       -fx-image:url("../resources/virusRegis.jpg");

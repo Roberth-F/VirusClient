@@ -5,15 +5,12 @@
  */
 package virusclient.controller;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -37,28 +34,29 @@ public class SalaDeEsperaController implements Initializable {
     @FXML
     private HBox hbUnirse;
     private String nombreJugador;
+
     /**
      * Initializes the controller class.
      */
-    
-public void setNombre(String nom){
-     System.out.println(nom);
-this.nombreJugador=nom;
-}
+
+    public void setNombre(String nom) {
+        System.out.println(nom);
+        this.nombreJugador = nom;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
-       
-        ImageView iv1=new ImageView("virusclient/resources/imagenesAvatar/avatar1.png");
+
+        ImageView iv1 = new ImageView("virusclient/resources/imagenesAvatar/avatar1.png");
         hbUnirse.getChildren().add(iv1);
-         Label btn1 = new Label();
+        Label btn1 = new Label();
         System.out.println(nombreJugador);
-btn1.setText("LALO");
-btn1.setGraphic(iv1);
-btn1.setContentDisplay(ContentDisplay.TOP);
-hbUnirse.getChildren().add(btn1);
-         
-    } 
-    
+        btn1.setText("LALO");
+        btn1.setGraphic(iv1);
+        btn1.setContentDisplay(ContentDisplay.TOP);
+        hbUnirse.getChildren().add(btn1);
+
+    }
+
 }

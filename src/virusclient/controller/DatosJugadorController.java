@@ -11,23 +11,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import virusclient.util.ComunicadorConRespuesta;
-import virusclient.util.FlowController;
-import virusclient.util.Respuesta;
+import javafx.scene.layout.AnchorPane;
+import virusclient.util.TbxControl;
 
 /**
  * FXML Controller class
  *
  * @author Lalo
  */
-public class DatosJugadorController implements Initializable {
+public class DatosJugadorController extends Rechargeable implements Initializable {
 
     @FXML
     private TextField txtNombreJugador;
@@ -35,13 +29,12 @@ public class DatosJugadorController implements Initializable {
     private Button btnCancelar;
     String nombreJugador;
     @FXML
-    private HBox root;
+    private AnchorPane root;
     @FXML
     private ImageView imgAvatar;
     @FXML
     private ImageView imgFondoRegistro;
-    @FXML
-    private StackPane StackP;
+
     /**
      * Initializes the controller class.
      */
@@ -49,13 +42,19 @@ public class DatosJugadorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         imgFondoRegistro.fitHeightProperty().bind(root.heightProperty());
         imgFondoRegistro.fitWidthProperty().bind(root.widthProperty());
-        StackP.prefWidthProperty().bind(root.heightProperty());
-    }    
+        imgAvatar.setOnMouseClicked((event) -> {
+            TbxControl.getInstance().viewInWindow("AvatarSelector", null, "Selector", false);
+        });
+    }
+
+    @Override
+    public void reOpen() {
+    }
 
     @FXML
     private void OnActionNombreJugador(ActionEvent event) {
-       nombreJugador=txtNombreJugador.getText();
-       System.out.print(nombreJugador);
+        nombreJugador = txtNombreJugador.getText();
+        System.out.print(nombreJugador);
     }
 
     @FXML
@@ -64,19 +63,19 @@ public class DatosJugadorController implements Initializable {
 
     @FXML
     private void OnActionSiguiente(ActionEvent event) {
-        if(txtNombreJugador.getText().length()!=0){
-         ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
-              Respuesta resp = serv.crearNuevaPartida(9999,nombreJugador);
-              System.out.println(resp.getEstado());
-              if(resp.getEstado()==true){
-                  System.out.print(nombreJugador+"enre");
-             ((SalaDeEsperaController)FlowController.getLoader("SalaDeEspera").getController()).setNombre("Lalo");
-             Stage s=(Stage)root.getScene().getWindow();
-             FlowController.mostrarView("SalaDeEspera");
-              }
-              
-              
-        }
+//        if(txtNombreJugador.getText().length()!=0){
+//         ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
+//              Respuesta resp = serv.crearNuevaPartida(9999,nombreJugador);
+//              System.out.println(resp.getEstado());
+//              if(resp.getEstado()==true){
+//                  System.out.print(nombreJugador+"enre");
+//             ((SalaDeEsperaController)FlowController.getLoader("SalaDeEspera").getController()).setNombre("Lalo");
+//             Stage s=(Stage)root.getScene().getWindow();
+//             FlowController.mostrarView("SalaDeEspera");
+//              }
+//              
+//              
+//        }
     }
-    
+
 }

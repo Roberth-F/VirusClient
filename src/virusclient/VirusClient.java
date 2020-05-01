@@ -6,54 +6,21 @@
 package virusclient;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import virusclient.util.ComunicadorConRespuesta;
-import virusclient.util.FlowController;
-import virusclient.util.Respuesta;
+import virusclient.util.TbxControl;
 
 /**
  *
  * @author Roberth
  */
 public class VirusClient extends Application {
+
     @Override
-        public void start(Stage stage) throws Exception {
-        Parent root = (Parent)FlowController.getLoader("MenuIncio").getRoot();
-        Scene scene = new Scene(root,700,600);       
-        stage.setScene(scene);
-        stage.show();
-     FlowController.InitializeFlow(stage,null);
+    public void start(Stage stage) {
+        TbxControl.getInstance().startControl(stage, null, null);
+        TbxControl.getInstance().viewBase(true, null);
+        TbxControl.getInstance().view("MenuIncio");
     }
-//    @Override
-//    @SuppressWarnings("Convert2Lambda")
-//    public void start(Stage primaryStage) {
-//        Button btn = new Button();
-//        btn.setText("Say 'Hello World'");
-//        btn.setOnAction(new EventHandler<ActionEvent>() {
-//            
-//            @Override
-//            public void handle(ActionEvent event) {
-//                //System.out.println("Hello World!");
-//                ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
-//                Respuesta resp = serv.crearNuevaPartida(9999, "Roberth");
-//                System.out.println(resp.getEstado());
-//            }
-//        });
-//        StackPane root = new StackPane();
-//        root.getChildren().add(btn);
-//        
-//        Scene scene = new Scene(root, 300, 250);
-//        
-//        primaryStage.setTitle("Hello World!");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-  //  }
 
     /**
      * @param args the command line arguments
@@ -61,5 +28,5 @@ public class VirusClient extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

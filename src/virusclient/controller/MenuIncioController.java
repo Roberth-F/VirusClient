@@ -13,24 +13,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import virusclient.util.FlowController;
+import javafx.scene.layout.AnchorPane;
+import virusclient.util.TbxControl;
 
 /**
  * FXML Controller class
  *
  * @author Lalo
  */
-public class MenuIncioController implements Initializable {
+public class MenuIncioController extends Rechargeable implements Initializable {
 
     @FXML
     private Button btnCrearPartida;
     @FXML
     private Button btnUnirsePartida;
     @FXML
-    private HBox root;
+    private AnchorPane root;
     @FXML
     private Label labelTitulo;
     @FXML
@@ -43,16 +41,18 @@ public class MenuIncioController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         fondo.fitHeightProperty().bind(root.heightProperty());
         fondo.fitWidthProperty().bind(root.widthProperty());
     }    
 
+
+    @Override
+    public void reOpen() {
+    }
+
     @FXML
-    private void OnActionCrearPartida(ActionEvent event) {
- 
-         FlowController.mostrarView("DatosJugador");
-        
+    private void crearPartida(ActionEvent event) {
+        TbxControl.getInstance().view("DatosJugador");
     }
     
 }
