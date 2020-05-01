@@ -90,7 +90,7 @@ public class ComunicadorConRespuesta {
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
-                    Socket sock = new Socket("192.168.1.5", 7777);
+                    Socket sock = new Socket("127.0.0.1", 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
                     pet.toStartGame("iniciarPartida", puertoEscucha, NombJugador, servSock.getLocalPort());

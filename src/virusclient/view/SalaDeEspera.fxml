@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="labTituloEsp" stylesheets="@../style/VistasCss.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="virusclient.controller.SalaDeEsperaController">
+   <children>
+      <VBox fx:id="vbContenedor" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <HBox fx:id="hbTitulo" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="labTituloEsp" text="Esperando Jugadores" />
+               </children>
+            </HBox>
+            <HBox fx:id="hbUnirse" alignment="CENTER" prefHeight="298.0" prefWidth="600.0" />
+         </children>
+      </VBox>
+   </children>
+</StackPane>

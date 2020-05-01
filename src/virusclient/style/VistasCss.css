@@ -1,0 +1,53 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 23/03/2019, 02:07:22 PM
+    Author     : LordLalo
+*/
+
+#fondo{
+    
+    -fx-image:url("../resources/virusFondo.jpg");
+}
+#imgAvatar{
+   -fx-image: url("../resources/imagenesAvatar/avatar1.png");
+}
+#imgFondoRegistro{
+      -fx-image:url("../resources/virusRegis.jpg");
+    
+}
+.labelTitulo{
+    
+    -fx-text-fill: blue;
+   -fx-font: bold 10pt "Berlin Sans FB" ;
+}
+.button{
+    -fx-text-fill: whitesmoke;
+    -fx-background-color: linear-gradient(  #4bd14b 1%,  black 95%);/* #999999 2%,  black 95%  #003399  #0000ff*/
+      -fx-border-radius:10;
+     -fx-background-radius: 10px;
+    -fx-font: bold 10pt "Berlin Sans FB" ;
+    -fx-pref-height: 60px; 
+     -fx-pref-width: 200px; 
+    -fx-border-color: black;
+  
+    
+}
+.button:hover{
+    -fx-background-color: linear-gradient(   #21b4e2 1%,  black 95%);/* #999999 2%,  black 95%*/
+   
+}
+.label{
+    -fx-text-fill:whitesmoke;
+    -fx-background-color: linear-gradient(  #1831DC 1%,  black 95%);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+   
+}
+.TextField:hover{
+    -fx-background-color: linear-gradient(   #21b4e2 1%,  black 95%);/* #999999 2%,  black 95%*/
+   
+}
