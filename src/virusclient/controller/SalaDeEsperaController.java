@@ -9,53 +9,46 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import virusclient.model.Jugador;
+import virusclient.util.AppContext;
 
 /**
  * FXML Controller class
  *
  * @author Lalo
  */
-public class SalaDeEsperaController implements Initializable {
+public class SalaDeEsperaController extends Rechargeable implements Initializable {
 
     @FXML
-    private StackPane root;
+    private AnchorPane root;
     @FXML
-    private VBox vbContenedor;
+    private ImageView fondoEspera;
     @FXML
-    private HBox hbTitulo;
+    private Label nombreJugador;
     @FXML
-    private Label labTituloEsp;
+    private ImageView perfilJugador;
     @FXML
-    private HBox hbUnirse;
-    private String nombreJugador;
+    private VBox jugadores;
 
     /**
      * Initializes the controller class.
      */
-
-    public void setNombre(String nom) {
-        System.out.println(nom);
-        this.nombreJugador = nom;
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        fondoEspera.fitHeightProperty().bind(root.heightProperty());
+        fondoEspera.fitWidthProperty().bind(root.widthProperty());
+        Jugador actual = (Jugador)AppContext.getInstance().get("jugador");
+        nombreJugador.setText(actual.getNombre());
+        perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-
-        ImageView iv1 = new ImageView("virusclient/resources/imagenesAvatar/avatar1.png");
-        hbUnirse.getChildren().add(iv1);
-        Label btn1 = new Label();
-        System.out.println(nombreJugador);
-        btn1.setText("LALO");
-        btn1.setGraphic(iv1);
-        btn1.setContentDisplay(ContentDisplay.TOP);
-        hbUnirse.getChildren().add(btn1);
+    public void reOpen() {
 
     }
 

@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import unaplanilla2.util.Mensaje;
+import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
 import virusclient.util.ComunicadorConRespuesta;
@@ -47,6 +48,7 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        NombreAvatar = "avt14.png";
         imgFondoRegistro.fitHeightProperty().bind(root.heightProperty());
         imgFondoRegistro.fitWidthProperty().bind(root.widthProperty());
         imgAvatar.setOnMouseClicked((event) -> {
@@ -67,6 +69,7 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
 
     @FXML
     private void onActionCancelar(ActionEvent event) {
+        TbxControl.getInstance().goBack();
     }
 
     @FXML
@@ -78,10 +81,8 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
 
             System.out.println(resp.getEstado());
             if (resp.getEstado() == true) {
-                System.out.print(nombreJugador + "entre");
-//                ((SalaDeEsperaController) FlowController.getLoader("SalaDeEspera").getController()).setNombre("Lalo");
-//                Stage s = (Stage) root.getScene().getWindow();
-//                FlowController.mostrarView("SalaDeEspera");
+                AppContext.getInstance().set("jugador", new Jugador(txtNombreJugador.getText(), NombreAvatar));
+                TbxControl.getInstance().view("SalaDeEspera");
             } else {
                 new Mensaje().show(Alert.AlertType.WARNING, "Atención", resp.getMensaje());
             }
