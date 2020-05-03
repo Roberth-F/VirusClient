@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class Peticion {
 
-    @SerializedName("invocar_a")
+     @SerializedName("invocar_a")
     private String metodo;          //Metodo del servidor que se desea llamar.
     @SerializedName("Ipv4")
     private String ip;              //IP de cliente.
@@ -32,6 +32,8 @@ public class Peticion {
     private String nombreJugador;   //Campo solo nesesario cuando se va a unir o crear partida.
     @SerializedName("puertoImediato")
     private int puertoImadiato;  //En caso de ser petición con respuesta a este puerto se envia la respuerta.
+    @SerializedName("avatar")
+    private String nombreAvatar;
 
     public Peticion() {
     }
@@ -48,8 +50,9 @@ public class Peticion {
      * partida.
      * @param puertoImediato Puerto al de cliente al que se le enviará de
      * imadiato la respuesta de si puede o no unirse a la partida.
+     * @param avatar Nombre de la imagen del jugador
      */
-    public void toStartGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato) {
+    public void toStartGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato, String avatar) {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException UE) {
@@ -60,6 +63,7 @@ public class Peticion {
         this.metodo = ServMethod;
         this.nombreJugador = nombreJugador;
         this.puertoImadiato = puertoImediato;
+        this.nombreAvatar = avatar;
     }
 
     /**
@@ -138,6 +142,18 @@ public class Peticion {
      */
     public void setNombreJugador(String nombreJugador) {
         this.nombreJugador = nombreJugador;
+    }
+
+    public int getPuertoImadiato() {
+        return puertoImadiato;
+    }
+
+    public void setPuertoImadiato(int puertoImadiato) {
+        this.puertoImadiato = puertoImadiato;
+    }
+
+    public String getNombreAvatar() {
+        return nombreAvatar;
     }
 
 }

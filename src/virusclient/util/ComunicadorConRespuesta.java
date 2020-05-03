@@ -35,16 +35,16 @@ public class ComunicadorConRespuesta {
      * se identificará frente a sus oponentes.
      * @return Respuerta del servidor a la petición hecha.
      */
-    public Respuesta unirApartExistente(int puertoEscucha, String NombJugador) {
+    public Respuesta unirApartExistente(int puertoEscucha, String NombJugador,String avatar) {
         try {
             ServerSocket servSock = new ServerSocket();
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
-                    Socket sock = new Socket("192.168.1.5", 7777);
+                    Socket sock = new Socket("192.168.1.2", 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
-                    pet.toStartGame("unirsePertida", puertoEscucha, NombJugador, servSock.getLocalPort());
+                    pet.toStartGame("unirsePertida", puertoEscucha, NombJugador, servSock.getLocalPort(),avatar);
                     String Json = new Gson().toJson(pet);
                     datos.writeUTF(Json);
                     sock.getOutputStream().close();
@@ -84,16 +84,16 @@ public class ComunicadorConRespuesta {
      * se identificará frente a sus oponentes.
      * @return Respuerta del servidor a la petición hecha.
      */
-    public Respuesta crearNuevaPartida(int puertoEscucha, String NombJugador) {
+    public Respuesta crearNuevaPartida(int puertoEscucha, String NombJugador,String avatar) {
         try {
             ServerSocket servSock = new ServerSocket(0);
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
-                    Socket sock = new Socket("127.0.0.1", 7777);
+                    Socket sock = new Socket("192.168.1.2", 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
-                    pet.toStartGame("iniciarPartida", puertoEscucha, NombJugador, servSock.getLocalPort());
+                    pet.toStartGame("iniciarPartida", puertoEscucha, NombJugador, servSock.getLocalPort(),avatar);
                     String Json = new Gson().toJson(pet);
                     datos.writeUTF(Json);
                     sock.getOutputStream().close();

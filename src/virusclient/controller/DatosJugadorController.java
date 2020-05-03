@@ -17,6 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
+import virusclient.util.ComunicadorConRespuesta;
+import virusclient.util.Respuesta;
 
 /**
  * FXML Controller class
@@ -36,6 +38,7 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
     private ImageView imgAvatar;
     @FXML
     private ImageView imgFondoRegistro;
+    String NombreAvatar;
 
     /**
      * Initializes the controller class.
@@ -66,23 +69,29 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
 
     @FXML
     private void OnActionSiguiente(ActionEvent event) {
-//        if(txtNombreJugador.getText().length()!=0){
-//         ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
-//              Respuesta resp = serv.crearNuevaPartida(9999,nombreJugador);
-//              System.out.println(resp.getEstado());
-//              if(resp.getEstado()==true){
-//                  System.out.print(nombreJugador+"enre");
-//             ((SalaDeEsperaController)FlowController.getLoader("SalaDeEspera").getController()).setNombre("Lalo");
-//             Stage s=(Stage)root.getScene().getWindow();
-//             FlowController.mostrarView("SalaDeEspera");
-//              }
-//              
-//              
-//        }
+        if (txtNombreJugador.getText().length() != 0) {
+            ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
+           
+            Respuesta resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(),getNombreAvatar());
+       
+            System.out.println(resp.getEstado());
+            if (resp.getEstado() == true) {
+                System.out.print(nombreJugador + "entre");
+//                ((SalaDeEsperaController) FlowController.getLoader("SalaDeEspera").getController()).setNombre("Lalo");
+//                Stage s = (Stage) root.getScene().getWindow();
+//                FlowController.mostrarView("SalaDeEspera");
+            }
+
+        }
     }
 
     public void colocarNuevaImagenJugador(Image img, String nombre) {
         imgAvatar.setImage(img);
+        NombreAvatar=nombre;
+    }
+
+    public String getNombreAvatar() {
+        return NombreAvatar;
     }
 
 }
