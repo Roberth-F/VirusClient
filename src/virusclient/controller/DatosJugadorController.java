@@ -10,11 +10,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import unaplanilla2.util.Mensaje;
 import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
 import virusclient.util.ComunicadorConRespuesta;
@@ -71,23 +73,24 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
     private void OnActionSiguiente(ActionEvent event) {
         if (txtNombreJugador.getText().length() != 0) {
             ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
-           
-            Respuesta resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(),getNombreAvatar());
-       
+
+            Respuesta resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(), getNombreAvatar());
+
             System.out.println(resp.getEstado());
             if (resp.getEstado() == true) {
                 System.out.print(nombreJugador + "entre");
 //                ((SalaDeEsperaController) FlowController.getLoader("SalaDeEspera").getController()).setNombre("Lalo");
 //                Stage s = (Stage) root.getScene().getWindow();
 //                FlowController.mostrarView("SalaDeEspera");
+            } else {
+                new Mensaje().show(Alert.AlertType.WARNING, "Atención", resp.getMensaje());
             }
-
         }
     }
 
     public void colocarNuevaImagenJugador(Image img, String nombre) {
         imgAvatar.setImage(img);
-        NombreAvatar=nombre;
+        NombreAvatar = nombre;
     }
 
     public String getNombreAvatar() {
