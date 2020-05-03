@@ -1,7 +1,6 @@
 package virusclient.util;
 
 import virusclient.VirusClient;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
@@ -13,7 +12,7 @@ public class AppContext {
     private static HashMap<String, Object> context = new HashMap<>();
 
     private AppContext() {
-        cargarPropiedades();
+        //cargarPropiedades();
     }
 
     private static void createInstance() {

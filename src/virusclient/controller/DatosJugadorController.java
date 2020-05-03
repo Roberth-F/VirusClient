@@ -12,8 +12,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
 
 /**
@@ -43,6 +45,7 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
         imgFondoRegistro.fitHeightProperty().bind(root.heightProperty());
         imgFondoRegistro.fitWidthProperty().bind(root.widthProperty());
         imgAvatar.setOnMouseClicked((event) -> {
+            AppContext.getInstance().set("DataGame", this);
             TbxControl.getInstance().viewInWindow("AvatarSelector", null, "Selector", false);
         });
     }
@@ -76,6 +79,10 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
 //              
 //              
 //        }
+    }
+
+    public void colocarNuevaImagenJugador(Image img, String nombre) {
+        imgAvatar.setImage(img);
     }
 
 }
