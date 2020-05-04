@@ -78,6 +78,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
             ImageView avatar = new ImageView(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
             nombre.setGraphic(avatar);
             Platform.runLater(() -> {
+                jugadores.getChildren().clear();
                 jugadores.getChildren().add(nombre);
             });
         });
