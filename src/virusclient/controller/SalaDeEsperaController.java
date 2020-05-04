@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -76,8 +77,9 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
             nombre.setText(actual.getNombre());
             ImageView avatar = new ImageView(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
             nombre.setGraphic(avatar);
-            jugadores.getChildren().add(nombre);
-
+            Platform.runLater(() -> {
+                jugadores.getChildren().add(nombre);
+            });
         });
     }
 

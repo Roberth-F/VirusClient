@@ -37,7 +37,7 @@ public class ComunicadorConRespuesta {
      */
     public Respuesta unirApartExistente(int puertoEscucha, String NombJugador,String avatar) {
         try {
-            ServerSocket servSock = new ServerSocket();
+            ServerSocket servSock = new ServerSocket(0);
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
