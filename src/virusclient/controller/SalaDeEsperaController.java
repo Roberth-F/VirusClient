@@ -70,7 +70,9 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
     }
 
     public void cargarUsuarios() {
-        jugadores.getChildren().clear();
+        Platform.runLater(() -> {
+            jugadores.getChildren().clear();
+        });
         List<Jugador> lisJugadores = (List<Jugador>) AppContext.getInstance().get("nuevosJugadores");
         lisJugadores.forEach(actual -> {
             Label nombre = new Label();
