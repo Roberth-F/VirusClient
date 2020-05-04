@@ -7,6 +7,9 @@ package virusclient;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import virusclient.model.Actualizacion;
+import virusclient.model.Escuchador;
+import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
 
 /**
@@ -20,6 +23,22 @@ public class VirusClient extends Application {
         TbxControl.getInstance().startControl(stage, null, null);
         TbxControl.getInstance().viewBase(true, null);
         TbxControl.getInstance().view("MenuIncio");
+        actualizarFondo();
+    }
+
+    public void actualizarFondo() {
+        Thread actulizarHilo = new Thread(() -> {
+            Escuchador escucharSV = new Escuchador(9999);
+            while (true) {
+                Actualizacion actuali = escucharSV.escuchar();
+                if ("nuevosJugadores".equals(actuali.getAction())) {
+                    synchronized (AppContext.getInstance()) {
+                        AppContext.getInstance().set("nuevosJugadores", actuali.getlistaJugador());
+                    }
+                }
+            }
+        });
+        actulizarHilo.start();
     }
 
     /**

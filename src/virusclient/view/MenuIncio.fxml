@@ -26,7 +26,7 @@
                   <Insets bottom="15.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btnUnirsePartida" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Unirse a partida">
+            <Button fx:id="btnUnirsePartida" mnemonicParsing="false" onAction="#OnActionUnirse" prefHeight="25.0" prefWidth="107.0" text="Unirse a partida">
                <VBox.margin>
                   <Insets bottom="15.0" />
                </VBox.margin>

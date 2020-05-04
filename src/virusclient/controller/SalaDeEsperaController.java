@@ -6,7 +6,10 @@
 package virusclient.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -34,17 +37,48 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
     private ImageView perfilJugador;
     @FXML
     private VBox jugadores;
+    private Timer tiempoActualizar;
+    private TimerTask ejecutor;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         fondoEspera.fitHeightProperty().bind(root.heightProperty());
         fondoEspera.fitWidthProperty().bind(root.widthProperty());
-        Jugador actual = (Jugador)AppContext.getInstance().get("jugador");
+        Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
         nombreJugador.setText(actual.getNombre());
         perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
+        ejecutor = new TimerTask() {
+            @Override
+            public void run() {
+                if (AppContext.getInstance().get("nuevosJugadores") != null) {
+                    synchronized (AppContext.getInstance()) {
+                        cargarUsuarios();
+                        AppContext.getInstance().set("nuevosJugadores", null);
+                    }
+
+                }
+            }
+        };
+        tiempoActualizar = new Timer();
+
+        tiempoActualizar.schedule(ejecutor, 0, 2000);
+    }
+
+    public void cargarUsuarios() {
+
+        List<Jugador> lisJugadores = (List<Jugador>) AppContext.getInstance().get("nuevosJugadores");
+        lisJugadores.forEach(actual -> {
+            Label nombre = new Label();
+            nombre.setText(actual.getNombre());
+            ImageView avatar = new ImageView(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
+            nombre.setGraphic(avatar);
+            jugadores.getChildren().add(nombre);
+
+        });
     }
 
     @Override

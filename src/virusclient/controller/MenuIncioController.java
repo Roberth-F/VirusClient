@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
 
 /**
@@ -52,7 +53,15 @@ public class MenuIncioController extends Rechargeable implements Initializable {
 
     @FXML
     private void crearPartida(ActionEvent event) {
+        AppContext.getInstance().set("unirse",false);
         TbxControl.getInstance().view("DatosJugador");
+    }
+
+    @FXML
+    private void OnActionUnirse(ActionEvent event) {
+        AppContext.getInstance().set("unirse",true);
+        TbxControl.getInstance().view("DatosJugador");
+     
     }
     
 }

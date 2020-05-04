@@ -76,8 +76,12 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
     private void OnActionSiguiente(ActionEvent event) {
         if (txtNombreJugador.getText().length() != 0) {
             ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
-
-            Respuesta resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(), getNombreAvatar());
+            Respuesta resp;
+            if ((Boolean) AppContext.getInstance().get("unirse")) {
+                resp = serv.unirApartExistente(9999, txtNombreJugador.getText(), getNombreAvatar());
+            } else {
+                resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(), getNombreAvatar());
+            }
 
             System.out.println(resp.getEstado());
             if (resp.getEstado() == true) {

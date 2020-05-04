@@ -5,13 +5,17 @@
  */
 package virusclient.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  *
  * @author Roberth
  */
 public class Jugador {
 
+    @SerializedName("nombreJug")
     private String Nombre;
+    @SerializedName("nombreAvt")
     private String nombAvatar;
 
     public Jugador(String Nombre, String nombAvatar) {
