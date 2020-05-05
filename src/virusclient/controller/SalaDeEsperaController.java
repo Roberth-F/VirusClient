@@ -65,13 +65,12 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
             }
         };
         tiempoActualizar = new Timer();
-
         tiempoActualizar.schedule(ejecutor, 0, 2000);
     }
 
     public void cargarUsuarios() {
         Platform.runLater(() -> {
-            jugadores.getChildren().clear();
+            jugadores.getChildren().removeIf(nodo -> ((Label) nodo).getGraphic() != null);
         });
         List<Jugador> lisJugadores = (List<Jugador>) AppContext.getInstance().get("nuevosJugadores");
         lisJugadores.forEach(actual -> {
@@ -83,11 +82,13 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
                 jugadores.getChildren().add(nombre);
             });
         });
+        Platform.runLater(() -> {
+            jugadores.getChildren().removeIf(titulo -> ((Label) titulo).getText().equals(((Jugador) AppContext.getInstance().get("jugador")).getNombre()));
+        });
     }
 
     @Override
     public void reOpen() {
 
     }
-
 }
