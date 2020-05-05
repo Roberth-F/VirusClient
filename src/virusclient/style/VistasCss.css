@@ -8,6 +8,14 @@ and open the template in the editor.
     Author     : LordLalo
 */
 
+*{
+    -fx-SalaEspera-listaJug-color: #424242B3; /*B3 indica transparencia de 70%*/
+    -fx-backG-button-color: linear-gradient(  #4bd14b 1%,  black 95%);/* #999999 2%,  black 95%  #003399  #0000ff*/
+    -fx-backG-button-color-hover: linear-gradient(   #21b4e2 1%,  black 95%);/* #999999 2%,  black 95%*/
+    -fx-SalaEspera-listJug-TxtColor: #E0E0E0;
+}
+
+
 #fondo{
 
     -fx-image:url("../resources/virusFondo.jpg");
@@ -26,22 +34,22 @@ and open the template in the editor.
 .labelTitulo{
 
     -fx-text-fill: blue;
-    -fx-font: bold 10pt "Berlin Sans FB" ;
+    -fx-font: bold 80pt "Berlin Sans FB" ;
 }
 .button{
     -fx-text-fill: whitesmoke;
-    -fx-background-color: linear-gradient(  #4bd14b 1%,  black 95%);/* #999999 2%,  black 95%  #003399  #0000ff*/
+    -fx-background-color: -fx-backG-button-color;
     -fx-border-radius:10;
     -fx-background-radius: 10px;
-    -fx-font: bold 10pt "Berlin Sans FB" ;
-    -fx-pref-height: 60px; 
-    -fx-pref-width: 200px; 
+    -fx-font: bold 9pt "Bahnschrift" ;
+/*    -fx-pref-height: 60px;          Es problemático tener un tamaño definido para todos los bonotes en general.
+    -fx-pref-width: 200px; */ 
     -fx-border-color: black;
 
 
 }
 .button:hover{
-    -fx-background-color: linear-gradient(   #21b4e2 1%,  black 95%);/* #999999 2%,  black 95%*/
+    -fx-background-color: -fx-backG-button-color-hover;
 
 }
 /*.label{
@@ -54,4 +62,18 @@ and open the template in the editor.
 .TextField:hover{
     -fx-background-color: linear-gradient(   #21b4e2 1%,  black 95%);/* #999999 2%,  black 95%*/
 
+}
+
+.SalaEspera_JugadoresConectos > Label{
+    -fx-text-fill: -fx-SalaEspera-listJug-TxtColor;
+    -fx-background-color: -fx-SalaEspera-listaJug-color;
+    -fx-background-radius: 10px;
+    -fx-font: bold 20pt "Bahnschrift"
+}
+
+.SalaEspera_Jug_Principal{
+    -fx-text-fill: -fx-SalaEspera-listJug-TxtColor;
+    -fx-background-color: -fx-SalaEspera-listaJug-color;
+    -fx-background-radius: 10px;
+    -fx-font: bold 20pt "Bahnschrift"
 }

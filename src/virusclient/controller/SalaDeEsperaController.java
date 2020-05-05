@@ -66,6 +66,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         };
         tiempoActualizar = new Timer();
         tiempoActualizar.schedule(ejecutor, 0, 2000);
+        jugadores.getChildren().add(new Label("Jugadores conectados..."));
     }
 
     public void cargarUsuarios() {
