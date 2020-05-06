@@ -77,15 +77,15 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
         if (txtNombreJugador.getText().length() != 0) {
             ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
             Respuesta resp;
+            boolean host = false;
             if ((Boolean) AppContext.getInstance().get("unirse")) {
                 resp = serv.unirApartExistente(9999, txtNombreJugador.getText(), getNombreAvatar());
             } else {
                 resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(), getNombreAvatar());
+                host = true;
             }
-
-            System.out.println(resp.getEstado());
             if (resp.getEstado() == true) {
-                AppContext.getInstance().set("jugador", new Jugador(txtNombreJugador.getText(), NombreAvatar));
+                AppContext.getInstance().set("jugador", new Jugador(txtNombreJugador.getText(), NombreAvatar, host));
                 TbxControl.getInstance().view("SalaDeEspera");
             } else {
                 new Mensaje().show(Alert.AlertType.WARNING, "Atención", resp.getMensaje());

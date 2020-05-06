@@ -11,15 +11,22 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import unaplanilla2.util.Mensaje;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
+import virusclient.util.ComunicadorConRespuesta;
+import virusclient.util.ComunicadorSinRespuesta;
+import virusclient.util.Respuesta;
 
 /**
  * FXML Controller class
@@ -40,13 +47,15 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
     private VBox jugadores;
     private Timer tiempoActualizar;
     private TimerTask ejecutor;
+    @FXML
+    private Button btnIniciarJuego;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        btnIniciarJuego.setText((((Jugador) AppContext.getInstance().get("jugador")).isHost()) ? "Iniciar juego      " : "Estoy listo para jugar      ");
         fondoEspera.fitHeightProperty().bind(root.heightProperty());
         fondoEspera.fitWidthProperty().bind(root.widthProperty());
         Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
@@ -60,7 +69,6 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
                         cargarUsuarios();
                         AppContext.getInstance().set("nuevosJugadores", null);
                     }
-
                 }
             }
         };
@@ -91,5 +99,17 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
     @Override
     public void reOpen() {
 
+    }
+
+    @FXML
+    private void OnAcionEsotyListo(ActionEvent event) {
+        if (((Jugador) AppContext.getInstance().get("jugador")).isHost()) {
+            Respuesta resp = new ComunicadorConRespuesta().iniciarJuego();
+            if (!resp.getEstado()) {
+                new Mensaje().show(Alert.AlertType.WARNING, "Atención", resp.getMensaje());
+            }
+        } else {
+            new ComunicadorSinRespuesta().votarPorInicioDeJuego();
+        }
     }
 }

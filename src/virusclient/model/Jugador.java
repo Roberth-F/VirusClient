@@ -17,10 +17,12 @@ public class Jugador {
     private String Nombre;
     @SerializedName("nombreAvt")
     private String nombAvatar;
+    private boolean host;
 
-    public Jugador(String Nombre, String nombAvatar) {
+    public Jugador(String Nombre, String nombAvatar, boolean host) {
         this.Nombre = Nombre;
         this.nombAvatar = nombAvatar;
+        this.host = host;
     }
 
     public String getNombre() {
@@ -39,4 +41,11 @@ public class Jugador {
         this.nombAvatar = nombAvatar;
     }
 
+    public boolean isHost() {
+        return host;
+    }
+
+    public void setHost(boolean host) {
+        this.host = host;
+    }
 }

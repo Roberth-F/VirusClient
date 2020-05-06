@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class Peticion {
 
-     @SerializedName("invocar_a")
+    @SerializedName("invocar_a")
     private String metodo;          //Metodo del servidor que se desea llamar.
     @SerializedName("Ipv4")
     private String ip;              //IP de cliente.
@@ -52,7 +52,7 @@ public class Peticion {
      * imadiato la respuesta de si puede o no unirse a la partida.
      * @param avatar Nombre de la imagen del jugador
      */
-    public void toStartGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato, String avatar) {
+    public void addToGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato, String avatar) {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException UE) {
@@ -64,6 +64,30 @@ public class Peticion {
         this.nombreJugador = nombreJugador;
         this.puertoImadiato = puertoImediato;
         this.nombreAvatar = avatar;
+    }
+
+    /**
+     * Genera una peteción que le dirá al servidor que el jugdor está listo para
+     * jugar.
+     */
+    public void yoEstoyListo() {
+        this.metodo = "nuevoJugadorListo";
+    }
+
+    /**
+     * Genera peteción capaz de pedir al servidor que intente iniciar el juego.
+     *
+     * @param puertoImediato puerto por el cual se va recibir la respuesta del
+     * servidor.
+     */
+    public void startGame(int puertoImediato) {
+        try {
+            this.ip = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.puertoImadiato = puertoImediato;
+        this.metodo = "startGame";
     }
 
     /**

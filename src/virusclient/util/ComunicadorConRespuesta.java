@@ -35,7 +35,7 @@ public class ComunicadorConRespuesta {
      * se identificará frente a sus oponentes.
      * @return Respuerta del servidor a la petición hecha.
      */
-    public Respuesta unirApartExistente(int puertoEscucha, String NombJugador,String avatar) {
+    public Respuesta unirApartExistente(int puertoEscucha, String NombJugador, String avatar) {
         try {
             ServerSocket servSock = new ServerSocket(0);
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
@@ -44,7 +44,7 @@ public class ComunicadorConRespuesta {
                     Socket sock = new Socket("192.168.1.2", 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
-                    pet.toStartGame("unirsePertida", puertoEscucha, NombJugador, servSock.getLocalPort(),avatar);
+                    pet.addToGame("unirsePertida", puertoEscucha, NombJugador, servSock.getLocalPort(), avatar);
                     String Json = new Gson().toJson(pet);
                     datos.writeUTF(Json);
                     sock.getOutputStream().close();
@@ -84,7 +84,7 @@ public class ComunicadorConRespuesta {
      * se identificará frente a sus oponentes.
      * @return Respuerta del servidor a la petición hecha.
      */
-    public Respuesta crearNuevaPartida(int puertoEscucha, String NombJugador,String avatar) {
+    public Respuesta crearNuevaPartida(int puertoEscucha, String NombJugador, String avatar) {
         try {
             ServerSocket servSock = new ServerSocket(0);
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
@@ -93,7 +93,7 @@ public class ComunicadorConRespuesta {
                     Socket sock = new Socket("192.168.1.2", 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
-                    pet.toStartGame("iniciarPartida", puertoEscucha, NombJugador, servSock.getLocalPort(),avatar);
+                    pet.addToGame("iniciarPartida", puertoEscucha, NombJugador, servSock.getLocalPort(), avatar);
                     String Json = new Gson().toJson(pet);
                     datos.writeUTF(Json);
                     sock.getOutputStream().close();
@@ -123,4 +123,48 @@ public class ComunicadorConRespuesta {
         }
     }
 
+    /**
+     * Pide al servidor que intente iniciar el juego.
+     *
+     * @return Respusto de valor true si el servidor ha accedido a iniciar juego
+     * y false si el servidor ha negado la petición.
+     */
+    public Respuesta iniciarJuego() {
+        try {
+            ServerSocket servSock = new ServerSocket(0);
+            Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
+                try {
+                    Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
+                    Socket sock = new Socket("192.168.1.2", 7777);
+                    DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+                    Peticion pet = new Peticion();
+                    pet.startGame(servSock.getLocalPort());
+                    String Json = new Gson().toJson(pet);
+                    datos.writeUTF(Json);
+                    sock.getOutputStream().close();
+                    datos.close();
+                    sock.close();
+                } catch (UnknownHostException UHE) {
+                    Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+                } catch (IOException | InterruptedException EX) {
+                    Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, EX);
+                }
+            });
+            enviardor.start();                                  //Arranca hilo enviador mientras el otro se pone en espera.
+            Socket canalComunic = servSock.accept();
+            DataInputStream informacion = new DataInputStream(canalComunic.getInputStream());
+            String Json = informacion.readUTF();
+            Respuesta resp = new Gson().fromJson(Json, Respuesta.class);
+            canalComunic.getInputStream().close();
+            informacion.close();
+            canalComunic.close();
+            return resp;
+        } catch (UnknownHostException UE) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UE);
+            return new Respuesta(false, "Ha ocurrido un error inesperado");
+        } catch (IOException IO) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, IO);
+            return new Respuesta(false, "Ha ocurrido un error inesperado");
+        }
+    }
 }

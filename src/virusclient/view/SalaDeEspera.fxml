@@ -34,6 +34,6 @@
             <VBox fx:id="jugadores" prefWidth="300.0" spacing="20.0" styleClass="SalaEspera_JugadoresConectos" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>
-      <Button layoutX="419.0" layoutY="374.0" mnemonicParsing="false" prefHeight="15.0" text="Estoy listo para jugar                             " AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="15.0" />
+      <Button fx:id="btnIniciarJuego" layoutX="419.0" layoutY="374.0" mnemonicParsing="false" onAction="#OnAcionEsotyListo" prefHeight="15.0" AnchorPane.bottomAnchor="2.0" AnchorPane.rightAnchor="15.0" />
    </children>
 </AnchorPane>
