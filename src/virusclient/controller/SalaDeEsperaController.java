@@ -110,6 +110,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
             }
         } else {
             new ComunicadorSinRespuesta().votarPorInicioDeJuego();
+            btnIniciarJuego.setDisable(true);
         }
     }
 }

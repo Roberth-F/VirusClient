@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import virusclient.util.AppContext;
 
 /**
  *
@@ -19,21 +20,20 @@ import java.util.logging.Logger;
  */
 public class Escuchador {
 
-    private final int port;               //puerto de escucha.
     private ServerSocket serverSocket;    //Socket que utiliza para la comunicación.
     private DataInputStream informacion;  //Información que recibe el esperador de parte del cliente.
 
-    public Escuchador(int port) {
-        this.port = port;
+    public Escuchador() {
         try {
-            this.serverSocket = new ServerSocket(9999);
+            this.serverSocket = new ServerSocket(0);
+            AppContext.getInstance().set("mainPort", serverSocket.getLocalPort());
         } catch (IOException IO) {
             System.err.println("NO SE PUDO HABILITAR PUERTO INICIAL DE ESCUCHA");
             Logger.getLogger(Escuchador.class.getName()).log(Level.SEVERE, IO.getMessage(), IO);
         }
     }
-    
-       public Actualizacion escuchar() {
+
+    public Actualizacion escuchar() {
         try {
             Socket canalComunicacion = serverSocket.accept();
             informacion = new DataInputStream(canalComunicacion.getInputStream());

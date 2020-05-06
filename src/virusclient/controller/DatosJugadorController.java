@@ -78,10 +78,11 @@ public class DatosJugadorController extends Rechargeable implements Initializabl
             ComunicadorConRespuesta serv = new ComunicadorConRespuesta();
             Respuesta resp;
             boolean host = false;
+            int mainPort = (int) AppContext.getInstance().get("mainPort");
             if ((Boolean) AppContext.getInstance().get("unirse")) {
-                resp = serv.unirApartExistente(9999, txtNombreJugador.getText(), getNombreAvatar());
+                resp = serv.unirApartExistente(mainPort, txtNombreJugador.getText(), getNombreAvatar());
             } else {
-                resp = serv.crearNuevaPartida(9999, txtNombreJugador.getText(), getNombreAvatar());
+                resp = serv.crearNuevaPartida(mainPort, txtNombreJugador.getText(), getNombreAvatar());
                 host = true;
             }
             if (resp.getEstado() == true) {

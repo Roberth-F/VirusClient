@@ -28,7 +28,7 @@ public class VirusClient extends Application {
 
     public void actualizarFondo() {
         Thread actulizarHilo = new Thread(() -> {
-            Escuchador escucharSV = new Escuchador(9999);
+            Escuchador escucharSV = new Escuchador();
             while (true) {
                 Actualizacion actuali = escucharSV.escuchar();
                 if ("nuevosJugadores".equals(actuali.getAction())) {
