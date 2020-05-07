@@ -64,16 +64,4 @@ public class ThreadCollerctor {
         }
         THCOLLECT.removeIf(th -> !th.isAlive());
     }
-
-    public void pauseThreads() {
-        for (Thread th : THCOLLECT) {
-            try {
-                th.interrupt();
-            } catch (SecurityException SE) {
-                System.err.println("Erro al finalizar hilo");
-                continue;
-            }
-        }
-        THCOLLECT.removeIf(th -> !th.isAlive());
-    }
 }
