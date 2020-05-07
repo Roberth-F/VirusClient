@@ -27,6 +27,7 @@ import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
 import virusclient.util.Respuesta;
+import virusclient.util.ThreadCollerctor;
 
 /**
  * FXML Controller class
@@ -74,6 +75,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         };
         tiempoActualizar = new Timer();
         tiempoActualizar.schedule(ejecutor, 0, 2000);
+        ThreadCollerctor.getInstance().addTimer(tiempoActualizar);
         jugadores.getChildren().add(new Label("Jugadores conectados..."));
     }
 

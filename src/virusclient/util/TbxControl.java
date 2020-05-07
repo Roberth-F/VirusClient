@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import java.util.logging.Level;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -76,7 +77,7 @@ public class TbxControl {
                     tree.insert(name, loader);
                 } catch (Exception ex) {
                     loader = null;
-                    java.util.logging.Logger.getLogger(TbxControl.class.getName()).log(Level.SEVERE,"Creando loader [" + name + "].", ex);
+                    java.util.logging.Logger.getLogger(TbxControl.class.getName()).log(Level.SEVERE, "Creando loader [" + name + "].", ex);
                 }
             }
         }
@@ -92,7 +93,7 @@ public class TbxControl {
             TbxControl.mainStage.setScene(new Scene(FXMLLoader.load(VirusClient.class.getResource("view/Base.fxml"), TbxControl.idioma)));
             TbxControl.mainStage.show();
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(TbxControl.class.getName()).log(Level.SEVERE,"Error inicializando la vista base.", ex);
+            java.util.logging.Logger.getLogger(TbxControl.class.getName()).log(Level.SEVERE, "Error inicializando la vista base.", ex);
         }
     }
 
@@ -225,6 +226,10 @@ public class TbxControl {
     public void changeLanguaje(ResourceBundle idioma) {  //--->Metodo sin probar
         TbxControl.idioma = idioma;
         tree.forEach(nodo -> nodo.setResources(idioma));
+    }
+
+    public void onAppClosing(EventHandler<WindowEvent> event) {
+        mainStage.setOnCloseRequest(event);
     }
 
 }

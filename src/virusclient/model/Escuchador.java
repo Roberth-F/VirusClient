@@ -7,7 +7,9 @@ package virusclient.model;
 
 import com.google.gson.Gson;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -22,6 +24,7 @@ public class Escuchador {
 
     private ServerSocket serverSocket;    //Socket que utiliza para la comunicación.
     private DataInputStream informacion;  //Información que recibe el esperador de parte del cliente.
+    private Socket canalComunicacion;
 
     public Escuchador() {
         try {
@@ -35,7 +38,7 @@ public class Escuchador {
 
     public Actualizacion escuchar() {
         try {
-            Socket canalComunicacion = serverSocket.accept();
+            canalComunicacion = serverSocket.accept();
             informacion = new DataInputStream(canalComunicacion.getInputStream());
             String Json = informacion.readUTF();
             Actualizacion actualizar = new Gson().fromJson(Json, Actualizacion.class);
@@ -51,4 +54,19 @@ public class Escuchador {
         }
     }
 
+    public void detener() {
+        try {
+            Socket sock = new Socket(InetAddress.getLocalHost().getHostAddress(), (int) AppContext.getInstance().get("mainPort"));
+            DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+            Actualizacion actStop = new Actualizacion();
+            actStop.toStop();
+            String Json = new Gson().toJson(actStop);
+            datos.writeUTF(Json);
+            sock.getOutputStream().close();
+            datos.close();
+            sock.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Escuchador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

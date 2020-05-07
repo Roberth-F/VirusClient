@@ -41,6 +41,13 @@ public class Actualizacion {
         return listaJugadoresUnidos;
     }
 
+    /**
+     * Genera actualizacion con orden de detener el escuchador del juego.
+     */
+    public void toStop() {
+        this.action = "stopAll";
+    }
+
     public String getAction() {
         return action;
     }

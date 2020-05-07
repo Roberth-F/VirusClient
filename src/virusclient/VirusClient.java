@@ -11,6 +11,7 @@ import virusclient.model.Actualizacion;
 import virusclient.model.Escuchador;
 import virusclient.util.AppContext;
 import virusclient.util.TbxControl;
+import virusclient.util.ThreadCollerctor;
 
 /**
  *
@@ -18,9 +19,16 @@ import virusclient.util.TbxControl;
  */
 public class VirusClient extends Application {
 
+    private final Escuchador escucharSV = new Escuchador();
+
     @Override
     public void start(Stage stage) {
         TbxControl.getInstance().startControl(stage, null, null);
+        TbxControl.getInstance().onAppClosing(event -> {
+            escucharSV.detener();
+            ThreadCollerctor.getInstance().stopThreads();
+            ThreadCollerctor.getInstance().stopTimers();
+        });
         TbxControl.getInstance().viewBase(true, null);
         TbxControl.getInstance().view("MenuIncio");
         actualizarFondo();
@@ -28,17 +36,21 @@ public class VirusClient extends Application {
 
     public void actualizarFondo() {
         Thread actulizarHilo = new Thread(() -> {
-            Escuchador escucharSV = new Escuchador();
             while (true) {
                 Actualizacion actuali = escucharSV.escuchar();
+                if ("stopAll".equals(actuali.getAction())) {
+                    break;
+                }
                 if ("nuevosJugadores".equals(actuali.getAction())) {
                     synchronized (AppContext.getInstance()) {
                         AppContext.getInstance().set("nuevosJugadores", actuali.getlistaJugador());
                     }
                 }
             }
+            System.out.println("App se ha desconectado del servidor");
         });
         actulizarHilo.start();
+        ThreadCollerctor.getInstance().addThread(actulizarHilo);
     }
 
     /**
