@@ -22,9 +22,11 @@ import virusclient.model.Peticion;
  */
 public class ComunicadorSinRespuesta {
 
+    private final String serverIp = (String) AppContext.getInstance().get("ServerIP");
+    
     public void votarPorInicioDeJuego() {
         try {
-            Socket sock = new Socket("192.168.1.2", 7777);
+            Socket sock = new Socket(serverIp, 7777);
             DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
             Peticion pet = new Peticion();
             pet.yoEstoyListo();

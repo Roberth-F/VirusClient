@@ -21,10 +21,10 @@ import virusclient.model.Peticion;
  * peticiones con el servidor. La comunicación es bidireccional, es decir que se
  * recibirá una respuesta inmediata a la peticion.
  *
- * @author Roberth
+ * @author Roberth 😊
  */
 public class ComunicadorConRespuesta {
-
+    private final String serverIp = (String) AppContext.getInstance().get("ServerIP");
     /**
      * Intenta unir al jugador a la partida actual en caso de existir una en el
      * servidor y el juego no halla iniciado aun.
@@ -33,6 +33,7 @@ public class ComunicadorConRespuesta {
      * del jugador.
      * @param NombJugador String que represente el nombre con el que el jugador
      * se identificará frente a sus oponentes.
+     * @param avatar nombre de avatar de jugador.
      * @return Respuerta del servidor a la petición hecha.
      */
     public Respuesta unirApartExistente(int puertoEscucha, String NombJugador, String avatar) {
@@ -41,7 +42,7 @@ public class ComunicadorConRespuesta {
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
-                    Socket sock = new Socket("192.168.1.2", 7777);
+                    Socket sock = new Socket(serverIp, 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
                     pet.addToGame("unirsePertida", puertoEscucha, NombJugador, servSock.getLocalPort(), avatar);
@@ -90,7 +91,7 @@ public class ComunicadorConRespuesta {
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
-                    Socket sock = new Socket("192.168.1.2", 7777);
+                    Socket sock = new Socket(serverIp, 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
                     pet.addToGame("iniciarPartida", puertoEscucha, NombJugador, servSock.getLocalPort(), avatar);
@@ -135,7 +136,7 @@ public class ComunicadorConRespuesta {
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
                 try {
                     Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
-                    Socket sock = new Socket("192.168.1.2", 7777);
+                    Socket sock = new Socket(serverIp, 7777);
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
                     pet.startGame(servSock.getLocalPort());

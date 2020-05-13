@@ -12,15 +12,13 @@ public class AppContext {
     private static HashMap<String, Object> context = new HashMap<>();
 
     private AppContext() {
-        //cargarPropiedades();
+        cargarPropiedades();
     }
 
     private static void createInstance() {
-        if (INSTANCE == null) {
-            synchronized (AppContext.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AppContext();
-                }
+        synchronized (AppContext.class) {
+            if (INSTANCE == null) {
+                INSTANCE = new AppContext();
             }
         }
     }
@@ -35,18 +33,12 @@ public class AppContext {
     private void cargarPropiedades() {
         try {
             Properties appProperties = new Properties();
-            appProperties.load(VirusClient.class.getResourceAsStream("/configuration/properties.ini"));
-            if (appProperties.getProperty("directProfPics") != null) {
-                this.set("directProfPics", appProperties.getProperty("directProfPics"));
-            }
-            if (appProperties.getProperty("directLibraries") != null) {
-                this.set("directLibraries", appProperties.getProperty("directLibraries"));
-            }
-            if (appProperties.getProperty("dbDirect") != null) {
-                this.set("dbDirect", appProperties.getProperty("dbDirect"));
+            appProperties.load(VirusClient.class.getResourceAsStream("/configuration/RedConfig.ini"));
+            if (appProperties.getProperty("serverIP") != null) {
+                this.set("ServerIP", appProperties.getProperty("serverIP"));
             }
         } catch (IOException io) {
-            System.out.println("Archivo de configuración no encontrado.");
+            System.out.println("Archivo de configuración de red no encontrado.");
         }
     }
 
