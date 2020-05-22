@@ -5,20 +5,30 @@
  */
 package virusclient.controller;
 
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.events.JFXDrawerEvent;
+import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import unaplanilla2.util.Mensaje;
@@ -50,6 +60,10 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
     private TimerTask ejecutor;
     @FXML
     private Button btnIniciarJuego;
+    @FXML
+    private JFXDrawer DrawLContMenu;
+    @FXML
+    private JFXHamburger HamburgerLMBtn;
 
     /**
      * Initializes the controller class.
@@ -77,6 +91,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         tiempoActualizar.schedule(ejecutor, 0, 2000);
         ThreadCollerctor.getInstance().addTimer(tiempoActualizar);
         jugadores.getChildren().add(new Label("Jugadores conectados..."));
+        activarSalaChat();
     }
 
     public void cargarUsuarios() {
@@ -114,5 +129,31 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
             new ComunicadorSinRespuesta().votarPorInicioDeJuego();
             btnIniciarJuego.setDisable(true);
         }
+    }
+
+    private void activarSalaChat() {
+        HamburgerSlideCloseTransition HamTrans = new HamburgerSlideCloseTransition(HamburgerLMBtn);
+        HamTrans.setRate(-1);
+        try {
+            AnchorPane anchorP = (AnchorPane) FXMLLoader.load(getClass().getResource("/virusclient/view/SalaChat.fxml"));
+            DrawLContMenu.setSidePane(anchorP);
+        } catch (IOException ex) {
+            Logger.getLogger(SalaDeEsperaController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        EventHandler<JFXDrawerEvent> amburgerEvent = (jfxae) -> {
+            HamTrans.setRate(HamTrans.getRate() * -1);
+            HamTrans.play();
+        };
+        EventHandler<MouseEvent> LateralMenuLauncher = (MouseEvent event) -> {
+            if (this.DrawLContMenu.isShown()) {
+                this.DrawLContMenu.close();
+            } else if(!(event.getSource() instanceof AnchorPane)){
+                this.DrawLContMenu.open();
+            }
+        };
+        root.setOnMouseClicked(LateralMenuLauncher);
+        HamburgerLMBtn.setOnMouseClicked(LateralMenuLauncher);
+        DrawLContMenu.setOnDrawerOpening(amburgerEvent);
+        DrawLContMenu.setOnDrawerClosing(amburgerEvent);
     }
 }

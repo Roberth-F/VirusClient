@@ -29,11 +29,11 @@ import virusclient.controller.Rechargeable;
  */
 public class TbxControl {
 
-    private static final Stack<String> viewed = new Stack<String>();
+    private static final Stack<String> VIEWED = new Stack<String>();
     private static TbxControl INSTANCE = null;
     private static Stage mainStage;
     private static ResourceBundle idioma;
-    private static final Tree<FXMLLoader> tree = new Tree<>();
+    private static final Tree<FXMLLoader> TREE = new Tree<>();
     private static String css = null;
 
     private TbxControl() {
@@ -67,14 +67,14 @@ public class TbxControl {
     }
 
     private FXMLLoader searchLoader(String name) {
-        FXMLLoader loader = (FXMLLoader) tree.find(name);
+        FXMLLoader loader = (FXMLLoader) TREE.find(name);
         if (loader == null) {
             synchronized (TbxControl.class) {
                 try {
                     loader = new FXMLLoader(VirusClient.class.getResource("view/" + name + ".fxml"),
                             TbxControl.idioma);
                     loader.load();
-                    tree.insert(name, loader);
+                    TREE.insert(name, loader);
                 } catch (Exception ex) {
                     loader = null;
                     java.util.logging.Logger.getLogger(TbxControl.class.getName()).log(Level.SEVERE, "Creando loader [" + name + "].", ex);
@@ -110,12 +110,12 @@ public class TbxControl {
             stage = TbxControl.mainStage;
             control.setStage(stage);
         }
-        if (!viewed.isEmpty()) {
-            if (!viewed.peek().equals(nombre)) {
-                viewed.push(nombre);
+        if (!VIEWED.isEmpty()) {
+            if (!VIEWED.peek().equals(nombre)) {
+                VIEWED.push(nombre);
             }
         } else {
-            viewed.push(nombre);
+            VIEWED.push(nombre);
         }
         ((AnchorPane) stage.getScene().getRoot()).getChildren().clear();
         ((AnchorPane) stage.getScene().getRoot()).getChildren().add(loader.getRoot());
@@ -188,7 +188,7 @@ public class TbxControl {
     }
 
     public void reset() {
-        TbxControl.tree.clear();
+        TbxControl.TREE.clear();
     }
 
     public void closeApp() {
@@ -196,22 +196,22 @@ public class TbxControl {
     }
 
     public void eliminarLoader(String name) {
-        tree.delete(name);
+        TREE.delete(name);
     }
 
     public void goBack() {
-        if (viewed.size() > 1) {
-            viewed.pop();
-            view(viewed.peek());
+        if (VIEWED.size() > 1) {
+            VIEWED.pop();
+            view(VIEWED.peek());
         }
     }
 
     public boolean deleteHistoryTo(String viewName) {
-        int pos = viewed.search(viewName);
+        int pos = VIEWED.search(viewName);
         boolean existe = pos != -1;
         if (existe) {
-            while (!viewed.peek().equals(viewName)) {
-                viewed.pop();
+            while (!VIEWED.peek().equals(viewName)) {
+                VIEWED.pop();
             }
             return true;
         }
@@ -225,7 +225,7 @@ public class TbxControl {
      */
     public void changeLanguaje(ResourceBundle idioma) {  //--->Metodo sin probar
         TbxControl.idioma = idioma;
-        tree.forEach(nodo -> nodo.setResources(idioma));
+        TREE.forEach(nodo -> nodo.setResources(idioma));
     }
 
     public void onAppClosing(EventHandler<WindowEvent> event) {
