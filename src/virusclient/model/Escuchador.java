@@ -42,7 +42,7 @@ public class Escuchador {
             informacion = new DataInputStream(canalComunicacion.getInputStream());
             String Json = informacion.readUTF();
             Actualizacion actualizar = new Gson().fromJson(Json, Actualizacion.class);
-            System.out.println("Recibida petición -->" + actualizar.getAction() + "<--");
+            System.out.println("Recibida actalización -->" + actualizar.getMetodo() + "<--");
             canalComunicacion.getInputStream().close();
             informacion.close();
             canalComunicacion.close();
