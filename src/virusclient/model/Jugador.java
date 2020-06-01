@@ -17,6 +17,7 @@ public class Jugador {
     private String Nombre;
     @SerializedName("nombreAvt")
     private String nombAvatar;
+    @SerializedName("host:")
     private boolean host;
 
     public Jugador(String Nombre, String nombAvatar, boolean host) {

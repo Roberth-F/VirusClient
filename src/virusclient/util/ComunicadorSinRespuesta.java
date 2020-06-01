@@ -23,7 +23,7 @@ import virusclient.model.Peticion;
 public class ComunicadorSinRespuesta {
 
     private final String serverIp = (String) AppContext.getInstance().get("ServerIP");
-    
+
     public void votarPorInicioDeJuego() {
         try {
             Socket sock = new Socket(serverIp, 7777);
@@ -39,6 +39,26 @@ public class ComunicadorSinRespuesta {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
         } catch (IOException ex) {
             Logger.getLogger(ComunicadorSinRespuesta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void solicitarSalida() {
+        if (AppContext.getInstance().get("jugador") != null) {
+            try {
+                Socket sock = new Socket(serverIp, 7777);
+                DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+                Peticion pet = new Peticion();
+                pet.peticionSalida();
+                String Json = new Gson().toJson(pet);
+                datos.writeUTF(Json);
+                sock.getOutputStream().close();
+                datos.close();
+                sock.close();
+            } catch (UnknownHostException UHE) {
+                Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+            } catch (IOException ex) {
+                Logger.getLogger(ComunicadorSinRespuesta.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

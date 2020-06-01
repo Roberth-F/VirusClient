@@ -14,9 +14,11 @@ import javafx.stage.Stage;
 import virusclient.controller.SalaChatController;
 import virusclient.model.Actualizacion;
 import virusclient.model.Escuchador;
+import virusclient.model.Jugador;
 import virusclient.util.AppContext;
+import virusclient.util.ComunicadorSinRespuesta;
 import virusclient.util.TbxControl;
-import virusclient.util.ThreadCollerctor;
+import virusclient.util.ThreadCollector;
 
 /**
  *
@@ -30,9 +32,10 @@ public class VirusClient extends Application {
     public void start(Stage stage) {
         TbxControl.getInstance().startControl(stage, null, null);
         TbxControl.getInstance().onAppClosing(event -> {
+            new ComunicadorSinRespuesta().solicitarSalida();
             escucharSV.detener();
-            ThreadCollerctor.getInstance().stopThreads();
-            ThreadCollerctor.getInstance().stopTimers();
+            ThreadCollector.getInstance().stopThreads();
+            ThreadCollector.getInstance().stopTimers();
         });
         TbxControl.getInstance().viewBase(true, null);
         TbxControl.getInstance().view("MenuIncio");
@@ -52,6 +55,9 @@ public class VirusClient extends Application {
                             AppContext.getInstance().set("nuevosJugadores", actuali.getlistaJugador());
                         }
                         break;
+                    case "volverHost":
+                        ((Jugador) AppContext.getInstance().get("jugador")).setHost(true);
+                        break;
                     default:
                         this.execute(actuali);
                         break;
@@ -60,7 +66,7 @@ public class VirusClient extends Application {
             System.err.println("App se ha desconectado del servidor");
         });
         actulizarHilo.start();
-        ThreadCollerctor.getInstance().addThread(actulizarHilo);
+        ThreadCollector.getInstance().addThread(actulizarHilo);
     }
 
     /**

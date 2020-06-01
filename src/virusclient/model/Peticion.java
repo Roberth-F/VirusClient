@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import virusclient.util.AppContext;
 
 /**
  * Una instancia de esta clase soporta ser enviada por la red en formato Json
@@ -51,6 +52,7 @@ public class Peticion {
      * @param puertoImediato Puerto al de cliente al que se le enviará de
      * imadiato la respuesta de si puede o no unirse a la partida.
      * @param avatar Nombre de la imagen del jugador
+     *
      */
     public void addToGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato, String avatar) {
         try {
@@ -71,7 +73,21 @@ public class Peticion {
      * jugar.
      */
     public void yoEstoyListo() {
+        this.nombreJugador = ((Jugador) AppContext.getInstance().get("jugador")).getNombre();
         this.metodo = "nuevoJugadorListo";
+    }
+
+    /**
+     *Crea una petición que le indica al servidor que este jugador se está retirando de la partida actual.
+     */
+    public void peticionSalida() {
+        try {
+            this.metodo = "desconectarJugador";
+            this.ip = InetAddress.getLocalHost().getHostAddress();
+            this.puerto = (int) AppContext.getInstance().get("mainPort");
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -179,5 +195,5 @@ public class Peticion {
     public String getNombreAvatar() {
         return nombreAvatar;
     }
-
+    
 }

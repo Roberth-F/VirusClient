@@ -37,7 +37,7 @@ import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
 import virusclient.util.Respuesta;
-import virusclient.util.ThreadCollerctor;
+import virusclient.util.ThreadCollector;
 
 /**
  * FXML Controller class
@@ -67,6 +67,9 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -79,6 +82,12 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         ejecutor = new TimerTask() {
             @Override
             public void run() {
+                Platform.runLater(() -> {
+                    if (((Jugador) AppContext.getInstance().get("jugador")).isHost()) {
+                        btnIniciarJuego.setText("Iniciar juego      ");
+                        btnIniciarJuego.setDisable(false);
+                    }
+                });
                 if (AppContext.getInstance().get("nuevosJugadores") != null) {
                     synchronized (AppContext.getInstance()) {
                         cargarUsuarios();
@@ -89,7 +98,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         };
         tiempoActualizar = new Timer();
         tiempoActualizar.schedule(ejecutor, 0, 2000);
-        ThreadCollerctor.getInstance().addTimer(tiempoActualizar);
+        ThreadCollector.getInstance().addTimer(tiempoActualizar);
         jugadores.getChildren().add(new Label("Jugadores conectados..."));
         activarSalaChat();
     }
@@ -147,7 +156,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         EventHandler<MouseEvent> LateralMenuLauncher = (MouseEvent event) -> {
             if (this.DrawLContMenu.isShown()) {
                 this.DrawLContMenu.close();
-            } else if(!(event.getSource() instanceof AnchorPane)){
+            } else if (!(event.getSource() instanceof AnchorPane)) {
                 this.DrawLContMenu.open();
             }
         };
