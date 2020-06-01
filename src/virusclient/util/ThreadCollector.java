@@ -15,24 +15,24 @@ import java.util.Timer;
  *
  * @author Roberth 😊
  */
-public class ThreadCollerctor {
+public class ThreadCollector {
 
-    private static ThreadCollerctor INSTANCE;
+    private static ThreadCollector INSTANCE;
     private static final List<Thread> THCOLLECT = new ArrayList<>();
     private static final List<Timer> TMCOLLECT = new ArrayList<>();
 
-    private ThreadCollerctor() {
+    private ThreadCollector() {
     }
 
     private static void createInstance() {
-        synchronized (ThreadCollerctor.class) {
+        synchronized (ThreadCollector.class) {
             if (INSTANCE == null) {
-                INSTANCE = new ThreadCollerctor();
+                INSTANCE = new ThreadCollector();
             }
         }
     }
 
-    public static ThreadCollerctor getInstance() {
+    public static ThreadCollector getInstance() {
         if (INSTANCE == null) {
             createInstance();
         }
