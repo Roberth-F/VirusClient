@@ -78,7 +78,8 @@ public class Peticion {
     }
 
     /**
-     *Crea una petición que le indica al servidor que este jugador se está retirando de la partida actual.
+     * Crea una petición que le indica al servidor que este jugador se está
+     * retirando de la partida actual.
      */
     public void peticionSalida() {
         try {
@@ -104,6 +105,14 @@ public class Peticion {
         }
         this.puertoImadiato = puertoImediato;
         this.metodo = "startGame";
+    }
+
+    /**
+     * Modifica la peticion de manera que esta ahora solicita al servidor
+     * iniciar el juego en todos los equipos conectados.
+     */
+    public void peticionDeJuego() {
+        this.metodo = "forzarInicio";
     }
 
     /**
@@ -195,5 +204,5 @@ public class Peticion {
     public String getNombreAvatar() {
         return nombreAvatar;
     }
-    
+
 }

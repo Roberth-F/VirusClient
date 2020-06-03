@@ -61,4 +61,26 @@ public class ComunicadorSinRespuesta {
             }
         }
     }
+
+    /**
+     * Pide al servidor que inidique a todos los equipos conetados que deben
+     * pasar al modo de juego.
+     */
+    public void forzarInicioDeJuego() {
+        try {
+            Socket sock = new Socket(serverIp, 7777);
+            DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+            Peticion pet = new Peticion();
+            pet.peticionDeJuego();
+            String Json = new Gson().toJson(pet);
+            datos.writeUTF(Json);
+            sock.getOutputStream().close();
+            datos.close();
+            sock.close();
+        } catch (UnknownHostException UHE) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+        } catch (IOException io) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, io);
+        }
+    }
 }

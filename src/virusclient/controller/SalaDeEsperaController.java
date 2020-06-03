@@ -37,6 +37,7 @@ import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
 import virusclient.util.Respuesta;
+import virusclient.util.TbxControl;
 import virusclient.util.ThreadCollector;
 
 /**
@@ -94,6 +95,8 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
                         AppContext.getInstance().set("nuevosJugadores", null);
                     }
                 }
+                //if extra para cambio de pantalla
+                //TbxControl.getInstance().view("");
             }
         };
         tiempoActualizar = new Timer();
@@ -133,6 +136,8 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
             Respuesta resp = new ComunicadorConRespuesta().iniciarJuego();
             if (!resp.getEstado()) {
                 new Mensaje().show(Alert.AlertType.WARNING, "Atención", resp.getMensaje());
+            }else{
+                new ComunicadorSinRespuesta().forzarInicioDeJuego();
             }
         } else {
             new ComunicadorSinRespuesta().votarPorInicioDeJuego();
