@@ -97,6 +97,13 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
                 }
                 //if extra para cambio de pantalla
                 //TbxControl.getInstance().view("");
+                if((AppContext.getInstance().get("cargarPartida"))!=null){
+                    
+                    System.out.println("entre");
+                    Platform.runLater(()->
+                 TbxControl.getInstance().view("Partida"));
+  
+        }
             }
         };
         tiempoActualizar = new Timer();
@@ -104,6 +111,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         ThreadCollector.getInstance().addTimer(tiempoActualizar);
         jugadores.getChildren().add(new Label("Jugadores conectados..."));
         activarSalaChat();
+        
     }
 
     public void cargarUsuarios() {
@@ -123,6 +131,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         Platform.runLater(() -> {
             jugadores.getChildren().removeIf(titulo -> ((Label) titulo).getText().equals(((Jugador) AppContext.getInstance().get("jugador")).getNombre()));
         });
+        
     }
 
     @Override

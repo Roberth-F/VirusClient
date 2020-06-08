@@ -58,6 +58,8 @@ public class VirusClient extends Application {
                     case "volverHost":
                         ((Jugador) AppContext.getInstance().get("jugador")).setHost(true);
                         break;
+                    case "modoJuego":
+                        AppContext.getInstance().set("cargarPartida",true);
                     default:
                         this.execute(actuali);
                         break;
