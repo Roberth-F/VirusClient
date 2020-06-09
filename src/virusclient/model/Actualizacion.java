@@ -25,6 +25,7 @@ public class Actualizacion {
     private String modulo;           //Módulo donde está el método
     @SerializedName("nuevosJugadores")
     private String listaJugadores;
+    private String listaJugadores2;
 
     /**
      * Prepara una actualización de lista de jugadores.
@@ -35,7 +36,10 @@ public class Actualizacion {
         metodo = "nuevosJugadores";
         listaJugadores = jugList;
     }
-
+ public  void actualizarDatosNuevos(String json) {
+        metodo = "jugadoresPartida";
+        listaJugadores2 = json;}
+ 
     public List<Jugador> getlistaJugador() {
         Type typeListJug = new TypeToken<List<Jugador>>() {
         }.getType();

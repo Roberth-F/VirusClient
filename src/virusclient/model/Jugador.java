@@ -6,6 +6,7 @@
 package virusclient.model;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Jugador {
     private String nombAvatar;
     @SerializedName("host:")
     private boolean host;
-
+    public ArrayList<Cartas>cartasActuales=new ArrayList<>();
     public Jugador(String Nombre, String nombAvatar, boolean host) {
         this.Nombre = Nombre;
         this.nombAvatar = nombAvatar;
@@ -49,4 +50,12 @@ public class Jugador {
     public void setHost(boolean host) {
         this.host = host;
     }
+     public void misCartas(Cartas cartas){
+      cartasActuales.add(cartas);
+    }    
+    public ArrayList<Cartas> verLista(){
+
+      return cartasActuales;
+    }
+    
 }
