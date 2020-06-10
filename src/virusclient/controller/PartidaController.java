@@ -66,21 +66,26 @@ public class PartidaController extends Rechargeable implements Initializable {
         List<Jugador> listaJ = (List<Jugador>) AppContext.getInstance().get("jugadoresPartida");
         if (listaJ.size() != 0) {
             listaJ.forEach(jugadorD -> {
-               if (actual.getNombre().equals(jugadorD.getNombre())) {
-                    jugadorD.verLista().forEach(misCartas->{
-                        Label car=new Label();  
-                        car.setText(misCartas.getNombreCarta());
-                        vBoxCartas.getChildren().add(car);
-                    });             
-                  }else{ 
-
+                if (actual.getNombre().equals(jugadorD.getNombre())) {
+                    jugadorD.verLista().forEach(misCartas -> {
+                        if(misCartas.getTipo()==1){
+                        ImageView cart=new ImageView();
+                        cart.setImage(new Image("virusclient/resources/cartas/"+"celebro"  ));
+                        vBoxCartas.getChildren().add(cart);
+                        }else{
+                        Label car = new Label();
+                        car.setText(misCartas.getNombreCarta()+" "+misCartas.getTipo()+" "+misCartas.getNumeroCarta());
+                        vBoxCartas.getChildren().add(car);}
+                    });
+                } else {
+//Crea las perfiles
                     ImageView perfilJugador1 = new ImageView();
                     Label lab = new Label();
                     lab.setText(jugadorD.getNombre());
                     perfilJugador1.setImage(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar()));
                     lab.setGraphic(perfilJugador1);
                     hBoxJugadores.getChildren().add(lab);
-               }
+                }
             });
 
         }
