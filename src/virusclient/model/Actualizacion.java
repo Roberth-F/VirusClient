@@ -54,10 +54,6 @@ public class Actualizacion {
         this.metodo = "stopAll";
     }
 
-    public String getListaJugadores() {
-        return listaJugadores;
-    }
-
     public String getMetodo() {
         return metodo;
     }

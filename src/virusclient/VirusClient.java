@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import virusclient.controller.PartidaController;
 import virusclient.controller.SalaChatController;
@@ -60,13 +61,8 @@ public class VirusClient extends Application {
                         ((Jugador) AppContext.getInstance().get("jugador")).setHost(true);
                         break;
                     case "modoJuego":
-                        AppContext.getInstance().set("cargarPartida",true);
+                        AppContext.getInstance().set("cargarPartida", true);
                         break;
-                    case "jugadoresPartida":
-                        System.out.println("virusclient.VirusClient.actualizarFondo()");
-                        AppContext.getInstance().set("jugadoresPartida",actuali.getlistaJugador());
-                        this.execute(actuali);
-                     break;
                     default:
                         this.execute(actuali);
                         break;
@@ -84,21 +80,27 @@ public class VirusClient extends Application {
      * @param act Actualización por ejecutar
      */
     public void execute(Actualizacion act) {
-        try {
-            if ("SalaChat".equals(act.getModulo())) {
-                SalaChatController salaChat = (SalaChatController) AppContext.getInstance().get("SalaChat");
-                Method met = getClassMethod(act, act.getMetodo());
-                met.invoke(salaChat, act);
-            } else {
-                if("jugadoresPartida".equals(act.getModulo())){
-                PartidaController nuevosDatos=(PartidaController)AppContext.getInstance().get("jugadoresPartida");
-                 Method met = getClassMethod(act, act.getMetodo());
-                met.invoke(nuevosDatos, act);
+
+        if ("SalaChat".equals(act.getModulo())) {
+            SalaChatController salaChat = (SalaChatController) AppContext.getInstance().get("SalaChat");
+            Method met = getClassMethod(salaChat, act.getMetodo());
+            Platform.runLater(() -> {
+                try {
+                    met.invoke(salaChat, act);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(VirusClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                //EJECUCION DE METODOS PANTALLA DE JUEGO.
-            }
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(VirusClient.class.getName()).log(Level.SEVERE, null, ex);
+            });
+        } else if ("SalaDeJuego".equals(act.getModulo())) {
+            PartidaController partController = (PartidaController) AppContext.getInstance().get("SalaDeJuego");
+            Method met = getClassMethod(partController, act.getMetodo());
+            Platform.runLater(() -> {
+                try {
+                    met.invoke(partController, act);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(VirusClient.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
         }
     }
 
@@ -118,13 +120,11 @@ public class VirusClient extends Application {
             if (objeto instanceof SalaChatController) {
                 return ((SalaChatController) objeto).getClass().getDeclaredMethod(nombreMethod, Actualizacion.class);
             } else {
-                //Aqui va retorno de métodos de la pantalla de juego
-                if(objeto instanceof PartidaController){
-                 return  ((PartidaController) objeto).getClass().getDeclaredMethod(nombreMethod, Actualizacion.class);
-                }else{
-                return null;
+                if (objeto instanceof PartidaController) {
+                    return ((PartidaController) objeto).getClass().getDeclaredMethod(nombreMethod, Actualizacion.class);
+                } else {
+                    return null;
                 }
-             //   return null;
             }
         } catch (NoSuchMethodException | SecurityException ex) {
             Logger.getLogger(VirusClient.class.getName()).log(Level.SEVERE, null, ex);

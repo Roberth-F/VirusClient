@@ -12,11 +12,11 @@ import com.google.gson.annotations.SerializedName;
  * @author LordLalo
  */
 public class Cartas {
-     @SerializedName("nombreCarta")
+    @SerializedName("nombreCarta")
     private String nombre;
-    @SerializedName("TipoCarta:Organo=1,virus=2..etc")
+    @SerializedName("tipoCarta")
     private int tipo;
-    @SerializedName("Cantidad numero de carta de ese tipo cartas")
+    @SerializedName("numeroCarta")
     private  int cantidad;
     public Cartas(String nombreCarta, int tipoCarta,int numeroCarta) {
         this.nombre = nombreCarta;

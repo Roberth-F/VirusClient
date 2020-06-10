@@ -21,6 +21,8 @@ public class Jugador {
     @SerializedName("host:")
     private boolean host;
     public ArrayList<Cartas>cartasActuales=new ArrayList<>();
+    
+    
     public Jugador(String Nombre, String nombAvatar, boolean host) {
         this.Nombre = Nombre;
         this.nombAvatar = nombAvatar;

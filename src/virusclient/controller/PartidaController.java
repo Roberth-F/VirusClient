@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javax.swing.text.html.CSS;
 import unaplanilla2.util.Mensaje;
+import virusclient.model.Actualizacion;
 import virusclient.model.Cartas;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
@@ -38,6 +39,7 @@ public class PartidaController extends Rechargeable implements Initializable {
     private VBox vBoxCartas;
     @FXML
     private AnchorPane panelPropio;
+    Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
 
     /**
      * Initializes the controller class.
@@ -45,8 +47,8 @@ public class PartidaController extends Rechargeable implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        AppContext.getInstance().set("partida", this);
-        this.CargarJugadores();
+        AppContext.getInstance().set("SalaDeJuego", this);
+        //this.CargarJugadores();
 
     }
 
@@ -55,40 +57,41 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     }
 
+    public void actualizarListasDeJuego(Actualizacion act) {
+        List<Jugador> listaJ = act.getlistaJugador();
+        listaJ.forEach(jugadorD -> {
+            if (actual.getNombre().equals(jugadorD.getNombre())) {
+                jugadorD.verLista().forEach(misCartas -> {
+                    if (misCartas.getTipo() == 1) {
+                        ImageView cart = new ImageView();
+                        cart.setImage(new Image("virusclient/resources/cartas/" + "cerebro.jpg"));
+                        vBoxCartas.getChildren().add(cart);
+                    } else {
+                        Label car = new Label();
+                        car.setText(misCartas.getNombreCarta() + " " + misCartas.getTipo() + " " + misCartas.getNumeroCarta());
+                        vBoxCartas.getChildren().add(car);
+                    }
+                });
+            } else {
+//Crea las perfiles
+                ImageView perfilJugador1 = new ImageView();
+                Label lab = new Label();
+                lab.setText(jugadorD.getNombre());
+                perfilJugador1.setImage(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar()));
+                lab.setGraphic(perfilJugador1);
+                hBoxJugadores.getChildren().add(lab);
+            }
+        });
+    }
+
     public void CargarJugadores() {
         ImageView perfilJugador = new ImageView();
-        Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
+
         Label nombre = new Label();
         nombre.setText(actual.getNombre());
         perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
         nombre.setGraphic(perfilJugador);
         panelPropio.getChildren().add(nombre);
-        List<Jugador> listaJ = (List<Jugador>) AppContext.getInstance().get("jugadoresPartida");
-        if (listaJ.size() != 0) {
-            listaJ.forEach(jugadorD -> {
-                if (actual.getNombre().equals(jugadorD.getNombre())) {
-                    jugadorD.verLista().forEach(misCartas -> {
-                        if(misCartas.getTipo()==1){
-                        ImageView cart=new ImageView();
-                        cart.setImage(new Image("virusclient/resources/cartas/"+"celebro"  ));
-                        vBoxCartas.getChildren().add(cart);
-                        }else{
-                        Label car = new Label();
-                        car.setText(misCartas.getNombreCarta()+" "+misCartas.getTipo()+" "+misCartas.getNumeroCarta());
-                        vBoxCartas.getChildren().add(car);}
-                    });
-                } else {
-//Crea las perfiles
-                    ImageView perfilJugador1 = new ImageView();
-                    Label lab = new Label();
-                    lab.setText(jugadorD.getNombre());
-                    perfilJugador1.setImage(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar()));
-                    lab.setGraphic(perfilJugador1);
-                    hBoxJugadores.getChildren().add(lab);
-                }
-            });
-
-        }
 
     }
 
