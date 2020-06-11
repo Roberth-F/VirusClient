@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,14 +13,19 @@
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <AnchorPane fx:id="panelJugadorSeleccionado" prefHeight="579.0" prefWidth="332.0" style="-fx-background-color: red;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="479.0" AnchorPane.topAnchor="0.0" />
+                  <AnchorPane fx:id="panelJugadorSeleccionado" prefHeight="579.0" prefWidth="332.0" style="-fx-background-color: red;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="479.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <FlowPane layoutX="25.0" layoutY="231.0" prefHeight="282.0" prefWidth="282.0" AnchorPane.bottomAnchor="66.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="231.0" />
+                        <Label fx:id="labelContricante" alignment="CENTER" layoutX="81.0" layoutY="30.0" prefHeight="72.0" prefWidth="170.0" text="Contricante" textAlignment="CENTER" AnchorPane.bottomAnchor="477.0" AnchorPane.leftAnchor="81.0" AnchorPane.rightAnchor="81.0" AnchorPane.topAnchor="30.0" />
+                        <Label fx:id="labelCartasContricantes" layoutX="25.0" layoutY="130.0" prefHeight="41.0" prefWidth="99.0" text="Cartas en mano" />
+                     </children></AnchorPane>
                   <AnchorPane layoutX="332.0" prefHeight="579.0" prefWidth="479.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <HBox fx:id="hBoxJugadores" layoutY="75.0" prefHeight="100.0" prefWidth="479.0" style="-fx-background-color: blue;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <VBox fx:id="vBoxCartas" layoutX="1.0" layoutY="99.0" prefHeight="480.0" prefWidth="125.0" style="-fx-background-color: yellow;" />
+                        <VBox fx:id="vBoxCartas" layoutX="1.0" layoutY="99.0" prefHeight="480.0" prefWidth="125.0" style="-fx-background-color: yellow;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="354.0" AnchorPane.topAnchor="99.0" />
                         <AnchorPane fx:id="panelPropio" layoutX="127.0" layoutY="99.0" prefHeight="480.0" prefWidth="351.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <children>
-                              <FlowPane fx:id="cartasJugadas" layoutX="21.0" layoutY="75.0" prefHeight="339.0" prefWidth="312.0" style="-fx-background-color: blue;" />
+                              <FlowPane fx:id="cartasJugadas" layoutX="21.0" layoutY="113.0" prefHeight="347.0" prefWidth="301.0" style="-fx-background-color: blue;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="29.0" AnchorPane.topAnchor="113.0" />
                            </children></AnchorPane>
                      </children>
                   </AnchorPane>

@@ -8,12 +8,9 @@ package virusclient.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,9 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javax.swing.text.html.CSS;
-import static jdk.nashorn.internal.objects.NativeRegExp.source;
-import unaplanilla2.util.Mensaje;
 import virusclient.model.Actualizacion;
 import virusclient.model.Cartas;
 import virusclient.model.Jugador;
@@ -55,6 +49,10 @@ public class PartidaController extends Rechargeable implements Initializable {
     ImageView ima = new ImageView();
     Cartas cartaJugadaActual;
     List<Jugador> listaJ;
+    @FXML
+    private Label labelContricante;
+    @FXML
+    private Label labelCartasContricantes;
 
     /**
      * Initializes the controller class.
@@ -64,7 +62,7 @@ public class PartidaController extends Rechargeable implements Initializable {
         // TODO
         AppContext.getInstance().set("SalaDeJuego", this);
         this.CargarJugadores();
-        this.evento();
+        this.eventoColocarCartasDeJugador();
     }
 
     @Override
@@ -72,23 +70,11 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     }
 
-    public void evento() {
-        cartasJugadas.setOnDragOver(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
-
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                event.consume();
-
-            }
+    public void eventoColocarCartasDeJugador() {
+        cartasJugadas.setOnDragOver((DragEvent event) -> {
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            event.consume();
         });
-// cartasJugadas.setOnDragOver(value->{
-//          Dragboard db = value.getDragboard();
-//            if (db.hasImage()) {
-//                value.acceptTransferModes(TransferMode.COPY);
-//            }
-//
-//            value.consume();
-//          });
         cartasJugadas.setOnDragDropped(value -> {
             Dragboard db = value.getDragboard();
             if (db.hasImage()) {
@@ -97,10 +83,9 @@ public class PartidaController extends Rechargeable implements Initializable {
                 cartaColocada.setFitHeight(100);
                 cartaColocada.setFitWidth(100);
                 cartasJugadas.getChildren().add(cartaColocada);
-                //    vBoxCartas.getChildren().remove(ima);
                 vBoxCartas.getChildren().clear();
                 eliminarCartaDeMazo();
-                actualizarListasDeJuego2();
+                actualizarListasDeJuegoActualizada();
 
             }
             value.consume();
@@ -108,29 +93,20 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
 
     }
-
+//Eliminar las cartas despues de la lista de cartas de jugador
     public void eliminarCartaDeMazo() {
         listaJ.forEach(jugador -> {
             if (jugador.getNombre().equals(actual.getNombre())) {
-//        jugador.verLista().forEach(cartas->{
-//           
-//         if(cartas.equals(cartaJugadaActual)){
-//            jugador.verLista().remove(cartasJugadas);
-//             new Mensaje().show(Alert.AlertType.WARNING, "Atención","Elimine a:"+cartas.getNombreCarta());
-//         }
-//        
-//        });
-//           
                 for (int x = 0; x < jugador.verLista().size(); x++) {
                     if (jugador.verLista().get(x).getNombreCarta().equals(cartaJugadaActual.getNombreCarta()) && jugador.verLista().get(x).getNumeroCarta() == cartaJugadaActual.getNumeroCarta()) {
-                    jugador.verLista().remove(x);
+                        jugador.verLista().remove(x);
                     }
 
                 }
             }
         });
     }
-
+//Actuliza la lista de cartas de jugador
     public void actualizarListasDeJuego(Actualizacion act) {
 //        List<Jugador> 
         listaJ = act.getlistaJugador();
@@ -153,35 +129,38 @@ public class PartidaController extends Rechargeable implements Initializable {
                             }
                         }
                     }
-                    carta.setOnDragDetected(new EventHandler<MouseEvent>() {
-                        public void handle(MouseEvent event) {
-                            ima = carta;
-                            cartaJugadaActual = misCartas;
-                            Dragboard db = carta.startDragAndDrop(TransferMode.COPY);
-                            ClipboardContent content = new ClipboardContent();
-                            content.putImage(carta.getImage());
-                            content.putString("");
+                    carta.setOnDragDetected((MouseEvent event) -> {
+                        ima = carta;
+                        cartaJugadaActual = misCartas;
+                        Dragboard db = carta.startDragAndDrop(TransferMode.COPY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(carta.getImage());
+                        content.putString("");
 
-                            db.setContent(content);
-                            event.consume();
-                        }
+                        db.setContent(content);
+                        event.consume();
                     });
                     vBoxCartas.getChildren().add(carta);
                 });
             } else {
 //Crea las perfiles
                 ImageView perfilJugador1 = new ImageView();
-                Label lab = new Label();
-                lab.setText(jugadorD.getNombre());
+                Label labelPerfilContricante = new Label();
+                labelPerfilContricante.setText(jugadorD.getNombre());
                 perfilJugador1.setImage(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar()));
-
-                lab.setGraphic(perfilJugador1);
-                hBoxJugadores.getChildren().add(lab);
+                labelPerfilContricante.setGraphic(perfilJugador1);
+                //Evento de click para los  perfiles de jugador
+                labelPerfilContricante.setOnMouseClicked((MouseEvent t) -> {
+                    labelContricante.setText(jugadorD.getNombre());
+                    labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar())));
+                    labelCartasContricantes.setText("Cartas Actuales:" + jugadorD.verLista().size());
+                });
+                hBoxJugadores.getChildren().add(labelPerfilContricante);
             }
         });
     }
 
-    public void actualizarListasDeJuego2() {
+    public void actualizarListasDeJuegoActualizada() {
 //        List<Jugador> 
 //        listaJ = act.getlistaJugador();
         listaJ.forEach(jugadorD -> {
@@ -203,18 +182,16 @@ public class PartidaController extends Rechargeable implements Initializable {
                             }
                         }
                     }
-                    carta.setOnDragDetected(new EventHandler<MouseEvent>() {
-                        public void handle(MouseEvent event) {
-                            ima = carta;
-                            cartaJugadaActual = misCartas;
-                            Dragboard db = carta.startDragAndDrop(TransferMode.COPY);
-                            ClipboardContent content = new ClipboardContent();
-                            content.putImage(carta.getImage());
-                            content.putString("");
-
-                            db.setContent(content);
-                            event.consume();
-                        }
+                    carta.setOnDragDetected((MouseEvent event) -> {
+                        ima = carta;
+                        cartaJugadaActual = misCartas;
+                        Dragboard db = carta.startDragAndDrop(TransferMode.COPY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(carta.getImage());
+                        content.putString("");
+                        
+                        db.setContent(content);
+                        event.consume();
                     });
                     vBoxCartas.getChildren().add(carta);
                 });
