@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -16,7 +17,10 @@
                      <children>
                         <HBox fx:id="hBoxJugadores" layoutY="75.0" prefHeight="100.0" prefWidth="479.0" style="-fx-background-color: blue;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <VBox fx:id="vBoxCartas" layoutX="1.0" layoutY="99.0" prefHeight="480.0" prefWidth="125.0" style="-fx-background-color: yellow;" />
-                        <AnchorPane fx:id="panelPropio" layoutX="127.0" layoutY="99.0" prefHeight="480.0" prefWidth="351.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <AnchorPane fx:id="panelPropio" layoutX="127.0" layoutY="99.0" prefHeight="480.0" prefWidth="351.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <children>
+                              <FlowPane fx:id="cartasJugadas" layoutX="21.0" layoutY="75.0" prefHeight="339.0" prefWidth="312.0" style="-fx-background-color: blue;" />
+                           </children></AnchorPane>
                      </children>
                   </AnchorPane>
                </children>
