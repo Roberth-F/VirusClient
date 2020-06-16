@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import virusclient.model.MarcoCarta;
 import virusclient.model.Peticion;
 
 /**
@@ -166,6 +167,47 @@ public class ComunicadorConRespuesta {
         } catch (IOException IO) {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, IO);
             return new Respuesta(false, "Ha ocurrido un error inesperado");
+        }
+    }
+        public MarcoCarta solicitarCarta() {
+        try {
+            ServerSocket servSock = new ServerSocket(0);
+            Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
+                try {
+                    Thread.sleep(10);              //Pausa imperseptible para dar tiempo al otro hilo.
+                    Socket sock = new Socket(serverIp, 7777);
+                    DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+                    Peticion pet = new Peticion();
+                    pet.solicitarCarta(servSock.getLocalPort());
+                    //   pet.addActualizacion(jugadores, servSock.getLocalPort());
+                    String Json = new Gson().toJson(pet);
+                    datos.writeUTF(Json);
+                    sock.getOutputStream().close();
+                    datos.close();
+                    sock.close();
+                } catch (UnknownHostException UHE) {
+                    Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+                } catch (IOException | InterruptedException EX) {
+                    Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, EX);
+                }
+            });
+            enviardor.start();                                  //Arranca hilo enviador mientras el otro se pone en espera.
+            Socket canalComunic = servSock.accept();
+            DataInputStream informacion = new DataInputStream(canalComunic.getInputStream());
+            String Json = informacion.readUTF();
+            // Respuesta resp = new Gson().fromJson(Json, Respuesta.class);
+            MarcoCarta cart = new Gson().fromJson(Json,MarcoCarta.class);
+            canalComunic.getInputStream().close();
+            informacion.close();
+            canalComunic.close();
+            // return resp;
+            return cart;
+        } catch (UnknownHostException UE) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UE);
+            return new MarcoCarta("","");
+        } catch (IOException IO) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, IO);
+            return  new MarcoCarta("","");
         }
     }
 }

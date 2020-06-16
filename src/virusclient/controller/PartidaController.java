@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +29,8 @@ import virusclient.model.Actualizacion;
 import virusclient.model.MarcoCarta;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
+import virusclient.util.ComunicadorConRespuesta;
+import virusclient.util.ComunicadorSinRespuesta;
 
 /**
  * FXML Controller class
@@ -62,6 +66,8 @@ public class PartidaController extends Rechargeable implements Initializable {
     @FXML
     private VBox vbCartaMesa5;
     private final List<VBox> campoJuego = new ArrayList();
+    @FXML
+    private Button btnSolicitar;
 
     /**
      * Initializes the controller class.
@@ -100,7 +106,8 @@ public class PartidaController extends Rechargeable implements Initializable {
                     act.getChildren().add(cartaColocada);
                     vBoxCartas.getChildren().clear();
                     eliminarCartaDeMazo();
-                    actualizarListasDeJuegoActualizada();
+                   new ComunicadorSinRespuesta().ActualizarCartas(listaJ);
+                    //actualizarListasDeJuegoActualizada();
                 }
                 value.consume();
             });
@@ -108,12 +115,14 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 //Eliminar las cartas despues de la lista de cartas de jugador
 
-    public void eliminarCartaDeMazo() {
+ public void eliminarCartaDeMazo() {
         listaJ.forEach(jugador -> {
             if (jugador.getNombre().equals(actual.getNombre())) {
                 for (int x = 0; x < jugador.verLista().size(); x++) {
-                    if (jugador.verLista().get(x).getNombreCarta().equals(cartaJugadaActual.getNombreCarta()) && jugador.verLista().get(x).getNumeroCarta() == cartaJugadaActual.getNumeroCarta()) {
+                    if (jugador.verLista().get(x).getTipo().equals(cartaJugadaActual.getTipo()) && jugador.verLista().get(x).getColor().equals(cartaJugadaActual.getColor())) {
+                        jugador.verCartasTablero().add(cartaJugadaActual);
                         jugador.verLista().remove(x);
+                        x=jugador.verLista().size();
                     }
 
                 }
@@ -123,7 +132,8 @@ public class PartidaController extends Rechargeable implements Initializable {
 //Actuliza la lista de cartas de jugador
 
     public void actualizarListasDeJuego(Actualizacion act) {
-//        List<Jugador> 
+vBoxCartas.getChildren().clear();
+hBoxJugadores.getChildren().clear();
         listaJ = act.getlistaJugador();
         listaJ.forEach(jugadorD -> {
             if (actual.getNombre().equals(jugadorD.getNombre())) {
@@ -131,19 +141,12 @@ public class PartidaController extends Rechargeable implements Initializable {
                     ImageView carta = new ImageView();
                     carta.setFitHeight(100);
                     carta.setFitWidth(100);
-                    if (misCartas.getTipo() == 1) {
-                        carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + ".png"));
-                    } else {
-                        if (misCartas.getTipo() == 2) {
-                            carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "2.png"));
-                        } else {
-                            if (misCartas.getTipo() == 3) {
-                                //carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "3.png"));
-                            } else {
-                                carta.setImage(new Image("virusclient/resources/cartas/" + "tratamiento" + ".png"));
-                            }
-                        }
+                    if(misCartas.getColor().equals("Sincolor")){
+                     carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getTipo()+".png"));
+                    }else{
+                        carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getTipo()+misCartas.getColor()+".png"));
                     }
+
                     carta.setOnDragDetected((MouseEvent event) -> {
                         ima = carta;
                         cartaJugadaActual = misCartas;
@@ -184,19 +187,6 @@ public class PartidaController extends Rechargeable implements Initializable {
                     ImageView carta = new ImageView();
                     carta.setFitHeight(100);
                     carta.setFitWidth(100);
-                    if (misCartas.getTipo() == 1) {
-                        carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + ".png"));
-                    } else {
-                        if (misCartas.getTipo() == 2) {
-                            carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "2.png"));
-                        } else {
-                            if (misCartas.getTipo() == 3) {
-                                carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "3.png"));
-                            } else {
-                                carta.setImage(new Image("virusclient/resources/cartas/" + "tratamiento" + ".png"));
-                            }
-                        }
-                    }
                     carta.setOnDragDetected((MouseEvent event) -> {
                         ima = carta;
                         cartaJugadaActual = misCartas;
@@ -221,6 +211,19 @@ public class PartidaController extends Rechargeable implements Initializable {
         perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
         nombre.setGraphic(perfilJugador);
         panelPropio.getChildren().add(nombre);
+    }
+
+    @FXML
+    private void OnActionSolicitarCarta(ActionEvent event) {
+       MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
+        listaJ.forEach(jugador -> {
+            if (jugador.getNombre().equals(actual.getNombre())) {
+                jugador.misCartas(resp);
+
+            }
+        });
+
+        new ComunicadorSinRespuesta().ActualizarCartas(listaJ);   
     }
 
 }

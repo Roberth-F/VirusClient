@@ -10,8 +10,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import virusclient.model.Jugador;
+
 import virusclient.model.Peticion;
 
 /**
@@ -81,6 +85,23 @@ public class ComunicadorSinRespuesta {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
         } catch (IOException io) {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, io);
+        }
+    }
+  public void ActualizarCartas(List<Jugador>jugador){
+        try {
+            Socket sock = new Socket(serverIp, 7777);
+            DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+            Peticion pet = new Peticion();
+            pet.addActualizacion(jugador);
+            String Json = new Gson().toJson(pet);
+            datos.writeUTF(Json);
+            sock.getOutputStream().close();
+            datos.close();
+            sock.close();
+        } catch (UnknownHostException UHE) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicadorSinRespuesta.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -8,6 +8,7 @@ package virusclient.model;
 import com.google.gson.annotations.SerializedName;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import virusclient.util.AppContext;
@@ -35,7 +36,8 @@ public class Peticion {
     private int puertoImadiato;  //En caso de ser petición con respuesta a este puerto se envia la respuerta.
     @SerializedName("avatar")
     private String nombreAvatar;
-
+@SerializedName("jugadores")
+    private List<Jugador> jugadores;
     public Peticion() {
     }
 
@@ -204,5 +206,26 @@ public class Peticion {
     public String getNombreAvatar() {
         return nombreAvatar;
     }
-
+       public void addActualizacion(List<Jugador>jugadores) {
+        try {
+            this.ip = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException UE) {
+            System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
+            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
+        }
+  
+        this.metodo = "actualizarLista";
+        this.jugadores = jugadores;
+       // this.puertoImadiato = puertoImediato;
+        
+    }
+   public void solicitarCarta(int puertoImediato) {
+        try {
+            this.ip = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.puertoImadiato = puertoImediato;
+        this.metodo = "solicitarCarta";
+    }
 }

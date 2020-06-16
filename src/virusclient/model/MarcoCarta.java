@@ -16,11 +16,20 @@ public class MarcoCarta {
     @SerializedName("nombreCarta")
     private String nombre;
     @SerializedName("tipoCarta")
-    private int tipo;
+    private String tipo;
     @SerializedName("numeroCarta")
     private int cantidad;
+   @SerializedName("color")
+    String color;
+      public  String getColor(){
+    return  color;
+   }
+    public MarcoCarta(String tipo,String color){
+     this.color=color;
+     this.tipo=tipo; 
+    }
 
-    public MarcoCarta(String nombreCarta, int tipoCarta, int numeroCarta) {
+    public MarcoCarta(String nombreCarta, String tipoCarta, int numeroCarta) {
         this.nombre = nombreCarta;
         this.tipo = tipoCarta;
         this.cantidad = numeroCarta;
@@ -39,7 +48,7 @@ public class MarcoCarta {
         return cantidad;
     }
 
-    public void setTipo(int tipoCarta) {//Organo=1/virus=2/medicina=3/tratamiento=4
+    public void setTipo(String tipoCarta) {//Organo=1/virus=2/medicina=3/tratamiento=4
         this.tipo = tipoCarta;
 
     }
@@ -48,7 +57,7 @@ public class MarcoCarta {
         return nombre;
     }
 
-    public int getTipo() {
+    public String getTipo() {
         return tipo;
     }
 }

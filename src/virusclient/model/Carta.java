@@ -5,6 +5,7 @@
  */
 package virusclient.model;
 
+import com.google.gson.annotations.SerializedName;
 import javafx.scene.image.ImageView;
 
 /**
@@ -12,19 +13,26 @@ import javafx.scene.image.ImageView;
  * @author rober
  */
 public class Carta extends ImageView {
+ 
+    @SerializedName("tipoCarta")
+    String tipoCarta;
+    @SerializedName("color")
+    String color;
+      private String getColor(){
+    return  color;
+   }
+    public Carta(String tipo,String color){
+     this.color=color;
+     this.tipoCarta=tipo; 
+    }
 
-    private String tipoCarta;
-    private String color;
+   private String getTipo(){
+    return  tipoCarta;
+   }
 
     
     
     
     //AQUI ES LALO
-    private String deducirTipo(int valor) {
-        return null;
-    }
-
-    private String deducirColor(int valor) {
-        return null;
-    }
+   
 }

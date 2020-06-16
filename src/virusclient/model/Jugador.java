@@ -21,7 +21,7 @@ public class Jugador {
     @SerializedName("host:")
     private boolean host;
     public ArrayList<MarcoCarta>cartasActuales=new ArrayList<>();
-    
+    public  ArrayList<MarcoCarta>cartasJugadas=new ArrayList<>();
     
     public Jugador(String Nombre, String nombAvatar, boolean host) {
         this.Nombre = Nombre;
@@ -59,5 +59,11 @@ public class Jugador {
 
       return cartasActuales;
     }
-    
+     public  void CartasTablero(MarcoCarta cartas ){
+     cartasJugadas.add(cartas);
+    }
+     public ArrayList<MarcoCarta> verCartasTablero(){
+
+      return cartasJugadas;
+    }
 }
