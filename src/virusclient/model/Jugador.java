@@ -20,7 +20,7 @@ public class Jugador {
     private String nombAvatar;
     @SerializedName("host:")
     private boolean host;
-    public ArrayList<Cartas>cartasActuales=new ArrayList<>();
+    public ArrayList<MarcoCarta>cartasActuales=new ArrayList<>();
     
     
     public Jugador(String Nombre, String nombAvatar, boolean host) {
@@ -52,10 +52,10 @@ public class Jugador {
     public void setHost(boolean host) {
         this.host = host;
     }
-     public void misCartas(Cartas cartas){
+     public void misCartas(MarcoCarta cartas){
       cartasActuales.add(cartas);
     }    
-    public ArrayList<Cartas> verLista(){
+    public ArrayList<MarcoCarta> verLista(){
 
       return cartasActuales;
     }

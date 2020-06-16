@@ -6,9 +6,10 @@
 package virusclient.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -20,11 +21,10 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import virusclient.model.Actualizacion;
-import virusclient.model.Cartas;
+import virusclient.model.MarcoCarta;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 
@@ -44,23 +44,35 @@ public class PartidaController extends Rechargeable implements Initializable {
     @FXML
     private AnchorPane panelPropio;
     Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
-    @FXML
-    private FlowPane cartasJugadas;
     ImageView ima = new ImageView();
-    Cartas cartaJugadaActual;
+    MarcoCarta cartaJugadaActual;
     List<Jugador> listaJ;
     @FXML
     private Label labelContricante;
     @FXML
     private Label labelCartasContricantes;
+    @FXML
+    private VBox vbCartaMesa1;
+    @FXML
+    private VBox vbCartaMesa2;
+    @FXML
+    private VBox vbCartaMesa4;
+    @FXML
+    private VBox vbCartaMesa3;
+    @FXML
+    private VBox vbCartaMesa5;
+    private final List<VBox> campoJuego = new ArrayList();
 
     /**
      * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         AppContext.getInstance().set("SalaDeJuego", this);
+        campoJuego.addAll(Arrays.asList(vbCartaMesa1, vbCartaMesa2, vbCartaMesa3, vbCartaMesa4, vbCartaMesa5));
         this.CargarJugadores();
         this.eventoColocarCartasDeJugador();
     }
@@ -71,29 +83,31 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     public void eventoColocarCartasDeJugador() {
-        cartasJugadas.setOnDragOver((DragEvent event) -> {
-            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            event.consume();
+        campoJuego.forEach(act -> {
+            act.setOnDragOver((DragEvent event) -> {
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                event.consume();
+            });
         });
-        cartasJugadas.setOnDragDropped(value -> {
-            Dragboard db = value.getDragboard();
-            if (db.hasImage()) {
-                value.setDropCompleted(true);
-                ImageView cartaColocada = new ImageView(db.getImage());
-                cartaColocada.setFitHeight(100);
-                cartaColocada.setFitWidth(100);
-                cartasJugadas.getChildren().add(cartaColocada);
-                vBoxCartas.getChildren().clear();
-                eliminarCartaDeMazo();
-                actualizarListasDeJuegoActualizada();
-
-            }
-            value.consume();
-
+        campoJuego.forEach(act -> {
+            act.setOnDragDropped(value -> {
+                Dragboard db = value.getDragboard();
+                if (db.hasImage()) {
+                    value.setDropCompleted(true);
+                    ImageView cartaColocada = new ImageView(db.getImage());
+                    cartaColocada.setFitHeight(100);
+                    cartaColocada.setFitWidth(100);
+                    act.getChildren().add(cartaColocada);
+                    vBoxCartas.getChildren().clear();
+                    eliminarCartaDeMazo();
+                    actualizarListasDeJuegoActualizada();
+                }
+                value.consume();
+            });
         });
-
     }
 //Eliminar las cartas despues de la lista de cartas de jugador
+
     public void eliminarCartaDeMazo() {
         listaJ.forEach(jugador -> {
             if (jugador.getNombre().equals(actual.getNombre())) {
@@ -107,12 +121,13 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
     }
 //Actuliza la lista de cartas de jugador
+
     public void actualizarListasDeJuego(Actualizacion act) {
 //        List<Jugador> 
         listaJ = act.getlistaJugador();
         listaJ.forEach(jugadorD -> {
             if (actual.getNombre().equals(jugadorD.getNombre())) {
-                jugadorD.verLista().forEach((Cartas misCartas) -> {
+                jugadorD.verLista().forEach((MarcoCarta misCartas) -> {
                     ImageView carta = new ImageView();
                     carta.setFitHeight(100);
                     carta.setFitWidth(100);
@@ -123,7 +138,7 @@ public class PartidaController extends Rechargeable implements Initializable {
                             carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "2.png"));
                         } else {
                             if (misCartas.getTipo() == 3) {
-                                carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "3.png"));
+                                //carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getNombreCarta() + "3.png"));
                             } else {
                                 carta.setImage(new Image("virusclient/resources/cartas/" + "tratamiento" + ".png"));
                             }
@@ -165,7 +180,7 @@ public class PartidaController extends Rechargeable implements Initializable {
 //        listaJ = act.getlistaJugador();
         listaJ.forEach(jugadorD -> {
             if (actual.getNombre().equals(jugadorD.getNombre())) {
-                jugadorD.verLista().forEach((Cartas misCartas) -> {
+                jugadorD.verLista().forEach((MarcoCarta misCartas) -> {
                     ImageView carta = new ImageView();
                     carta.setFitHeight(100);
                     carta.setFitWidth(100);
@@ -189,7 +204,7 @@ public class PartidaController extends Rechargeable implements Initializable {
                         ClipboardContent content = new ClipboardContent();
                         content.putImage(carta.getImage());
                         content.putString("");
-                        
+
                         db.setContent(content);
                         event.consume();
                     });
@@ -201,13 +216,11 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     public void CargarJugadores() {
         ImageView perfilJugador = new ImageView();
-
         Label nombre = new Label();
         nombre.setText(actual.getNombre());
         perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
         nombre.setGraphic(perfilJugador);
         panelPropio.getChildren().add(nombre);
-
     }
 
 }
