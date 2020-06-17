@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
@@ -31,7 +32,6 @@ import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
-import virusclient.util.Respuesta;
 
 /**
  * FXML Controller class
@@ -62,16 +62,12 @@ public class PartidaController extends Rechargeable implements Initializable {
     private VBox vbCartaMesa3;
     @FXML
     private VBox vbCartaMesa5;
+    @FXML
+    private FlowPane flowMesaContrincante;
     private List<Jugador> listJugadores;
     private Carta cartaJugadaActual;
     private final List<VBox> campoJuego = new ArrayList();
     private final Jugador jugadorResidente = (Jugador) AppContext.getInstance().get("jugador");
-    @FXML
-    private FlowPane flowMesaContrincante;
-    @FXML
-    private ImageView ImgMazo;
-    @FXML
-    private ImageView imgDescarte;
 
     /**
      * Initializes the controller class.
@@ -189,5 +185,28 @@ public class PartidaController extends Rechargeable implements Initializable {
         jugadorResidente.getCartasLogicasActuales().add(resp);
         jugadorResidente.refrescarCartasVisuales(true);
         refrescarBarraDeCartasPropias();
+    }
+
+    @FXML
+    private void onDragOverDesecho(DragEvent event) {
+        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        event.consume();
+    }
+
+    @FXML
+    private void onDragDropedDesecho(DragEvent event) {
+        Dragboard db = event.getDragboard();
+        if (db.hasImage()) {
+            event.setDropCompleted(true);
+            jugadorResidente.getCartasActuales().remove(cartaJugadaActual);
+            MarcoCarta toDesecho = cartaJugadaActual.toLogicCart();
+            jugadorResidente.refrescarCartasLogias();
+            desecharCartas(Arrays.asList(toDesecho));
+        }
+        event.consume();
+    }
+
+    public void desecharCartas(List<MarcoCarta> cartaList) {
+        System.out.println("virusclient.controller.PartidaController.desecharCartas()");
     }
 }

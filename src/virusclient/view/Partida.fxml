@@ -43,8 +43,8 @@
                         <VBox fx:id="vbCartaMesa4" alignment="TOP_CENTER" layoutX="429.0" layoutY="115.0" prefHeight="164.0" prefWidth="117.0" style="-fx-background-color: #CFD8DC;" />
                         <VBox fx:id="vbCartaMesa3" alignment="TOP_CENTER" layoutX="292.0" layoutY="116.0" maxWidth="117.0" prefHeight="164.0" prefWidth="117.0" style="-fx-background-color: #CFD8DC;" />
                         <VBox fx:id="vbCartaMesa5" alignment="TOP_CENTER" layoutX="226.0" layoutY="294.0" prefHeight="164.0" prefWidth="117.0" style="-fx-background-color: #CFD8DC;" />
-                        <ImageView id="maso" fx:id="ImgMazo" fitHeight="94.0" fitWidth="94.0" layoutX="12.0" layoutY="496.0" onMouseClicked="#onClickMazo" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="12.0" />
-                        <ImageView id="desecho" fx:id="imgDescarte" fitHeight="94.0" fitWidth="94.0" layoutX="91.0" layoutY="491.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="110.0" />
+                        <ImageView id="maso" fitHeight="94.0" fitWidth="94.0" layoutX="12.0" layoutY="496.0" onMouseClicked="#onClickMazo" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="12.0" />
+                        <ImageView id="desecho" fitHeight="94.0" fitWidth="94.0" layoutX="91.0" layoutY="491.0" onDragDropped="#onDragDropedDesecho" onDragOver="#onDragOverDesecho" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="110.0" />
                      </children>
                   </AnchorPane>
                </children>
