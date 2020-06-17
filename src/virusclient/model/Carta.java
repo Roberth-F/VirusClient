@@ -5,7 +5,6 @@
  */
 package virusclient.model;
 
-import com.google.gson.annotations.SerializedName;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -15,9 +14,7 @@ import javafx.scene.image.ImageView;
  */
 public class Carta extends ImageView {
 
-    @SerializedName("tipoCarta")
     String tipoCarta;
-    @SerializedName("color")
     String color;
 
     public Carta(String tipo, String color, boolean cartasTamañoCompleto) {
@@ -40,4 +37,7 @@ public class Carta extends ImageView {
         return tipoCarta;
     }
 
+    public MarcoCarta toLogicCart() {
+        return new MarcoCarta(this.tipoCarta, this.color);
+    }
 }

@@ -19,14 +19,16 @@ public class MarcoCarta {
     private String tipo;
     @SerializedName("numeroCarta")
     private int cantidad;
-   @SerializedName("color")
+    @SerializedName("color")
     String color;
-      public  String getColor(){
-    return  color;
-   }
-    public MarcoCarta(String tipo,String color){
-     this.color=color;
-     this.tipo=tipo; 
+
+    public String getColor() {
+        return color;
+    }
+
+    public MarcoCarta(String tipo, String color) {
+        this.color = color;
+        this.tipo = tipo;
     }
 
     public MarcoCarta(String nombreCarta, String tipoCarta, int numeroCarta) {
@@ -60,4 +62,9 @@ public class MarcoCarta {
     public String getTipo() {
         return tipo;
     }
+
+    public Carta toVisualCart(boolean tamannoCompleto) {
+        return new Carta(this.tipo, this.color, tamannoCompleto);
+    }
+    
 }
