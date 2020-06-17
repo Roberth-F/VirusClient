@@ -20,13 +20,34 @@ public class Jugador {
     private String nombAvatar;
     @SerializedName("host:")
     private boolean host;
-    public ArrayList<MarcoCarta>cartasActuales=new ArrayList<>();
-    public  ArrayList<MarcoCarta>cartasJugadas=new ArrayList<>();
-    
+    public ArrayList<MarcoCarta> cartasLogicasActuales = new ArrayList();
+    public ArrayList<MarcoCarta> cartasLogicasJugadas = new ArrayList();
+    public transient ArrayList<Carta> cartasActuales = new ArrayList();         //trancient evita que Gson pueda ver estos campos
+    public transient ArrayList<Carta> cartasJugadas = new ArrayList();
+
     public Jugador(String Nombre, String nombAvatar, boolean host) {
         this.Nombre = Nombre;
         this.nombAvatar = nombAvatar;
         this.host = host;
+    }
+
+    /**
+     * Combierte los marcos de las cartas en cartas reales y graficables.
+     *
+     * @param cartasTamañoCompleto Indica si las cartas son de tamaño completo o
+     * reducido
+     */
+    public void cargarCartasVisuales(boolean cartasTamañoCompleto) {
+        cartasActuales.clear();
+        cartasJugadas.clear();
+        cartasLogicasActuales.forEach(act -> {
+            cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto));
+        });
+    }
+    
+    public void ponerCartaEnLaMesa(Carta cartaBuscada){
+        cartasActuales.remove(cartaBuscada);
+        cartasJugadas.add(cartaBuscada);
     }
 
     public String getNombre() {
@@ -52,18 +73,65 @@ public class Jugador {
     public void setHost(boolean host) {
         this.host = host;
     }
-     public void misCartas(MarcoCarta cartas){
-      cartasActuales.add(cartas);
-    }    
-    public ArrayList<MarcoCarta> verLista(){
 
-      return cartasActuales;
+    public void misCartas(MarcoCarta cartas) {
+        cartasLogicasActuales.add(cartas);
     }
-     public  void CartasTablero(MarcoCarta cartas ){
-     cartasJugadas.add(cartas);
-    }
-     public ArrayList<MarcoCarta> verCartasTablero(){
 
-      return cartasJugadas;
+    public ArrayList<MarcoCarta> verLista() {
+
+        return cartasLogicasActuales;
     }
+
+    public void CartasTablero(MarcoCarta cartas) {
+        cartasLogicasJugadas.add(cartas);
+    }
+
+    public ArrayList<MarcoCarta> verCartasTablero() {
+
+        return cartasLogicasJugadas;
+    }
+
+    public ArrayList<MarcoCarta> getCartasLogicasActuales() {
+        return cartasLogicasActuales;
+    }
+
+    public void setCartasLogicasActuales(ArrayList<MarcoCarta> cartasLogicasActuales) {
+        this.cartasLogicasActuales = cartasLogicasActuales;
+    }
+
+    public ArrayList<MarcoCarta> getCartasLogicasJugadas() {
+        return cartasLogicasJugadas;
+    }
+
+    public void setCartasLogicasJugadas(ArrayList<MarcoCarta> cartasLogicasJugadas) {
+        this.cartasLogicasJugadas = cartasLogicasJugadas;
+    }
+
+    public ArrayList<Carta> getCartasActuales() {
+        return cartasActuales;
+    }
+
+    public void setCartasActuales(ArrayList<Carta> cartasActuales) {
+        this.cartasActuales = cartasActuales;
+    }
+
+    public ArrayList<Carta> getCartasJugadas() {
+        return cartasJugadas;
+    }
+
+    public void setCartasJugadas(ArrayList<Carta> cartasJugadas) {
+        this.cartasJugadas = cartasJugadas;
+    }
+
+    /**
+     * Dado que cartasActuales y cartasJugadas son de tipo trancient entonces
+     * Gson no la inicializa, por eso la necesidad de este método. (Inicializa
+     * dichas listas)
+     */
+    public void activate() {
+        this.cartasActuales = new ArrayList();
+        this.cartasJugadas = new ArrayList();
+    }
+
 }

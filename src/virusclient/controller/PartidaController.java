@@ -13,19 +13,19 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import virusclient.model.Actualizacion;
+import virusclient.model.Carta;
 import virusclient.model.MarcoCarta;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
@@ -47,10 +47,6 @@ public class PartidaController extends Rechargeable implements Initializable {
     private VBox vBoxCartas;
     @FXML
     private AnchorPane panelPropio;
-    Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
-    ImageView ima = new ImageView();
-    MarcoCarta cartaJugadaActual;
-    List<Jugador> listaJ;
     @FXML
     private Label labelContricante;
     @FXML
@@ -65,9 +61,16 @@ public class PartidaController extends Rechargeable implements Initializable {
     private VBox vbCartaMesa3;
     @FXML
     private VBox vbCartaMesa5;
+    private List<Jugador> listJugadores;
+    private Carta cartaJugadaActual;
     private final List<VBox> campoJuego = new ArrayList();
+    private final Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
     @FXML
-    private Button btnSolicitar;
+    private FlowPane flowMesaContrincante;
+    @FXML
+    private ImageView ImgMazo;
+    @FXML
+    private ImageView imgDescarte;
 
     /**
      * Initializes the controller class.
@@ -79,8 +82,8 @@ public class PartidaController extends Rechargeable implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         AppContext.getInstance().set("SalaDeJuego", this);
         campoJuego.addAll(Arrays.asList(vbCartaMesa1, vbCartaMesa2, vbCartaMesa3, vbCartaMesa4, vbCartaMesa5));
-        this.CargarJugadores();
-        this.eventoColocarCartasDeJugador();
+        this.cargarDatosJugador();
+        //this.eventoColocarCartasDeJugador();
     }
 
     @Override
@@ -89,141 +92,124 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     public void eventoColocarCartasDeJugador() {
-        campoJuego.forEach(act -> {
-            act.setOnDragOver((DragEvent event) -> {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+//        campoJuego.forEach(act -> {
+//            act.setOnDragOver((DragEvent event) -> {
+//                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+//                event.consume();
+//            });
+//        });
+//        
+    }
+//Eliminar las cartas despues de la lista de cartas de jugador
+
+    public void eliminarCartaDeMazo() {
+//        listJugadores.forEach(jugador -> {
+//            if (jugador.getNombre().equals(actual.getNombre())) {
+//                for (int x = 0; x < jugador.verLista().size(); x++) {
+//                    if (jugador.verLista().get(x).getTipo().equals(cartaJugadaActual.getTipo()) && jugador.verLista().get(x).getColor().equals(cartaJugadaActual.getColor())) {
+//                        jugador.verCartasTablero().add(cartaJugadaActual);
+//                        jugador.verLista().remove(x);
+//                        x = jugador.verLista().size();
+//                    }
+//                }
+//            }
+//        });
+    }
+
+    public void cargarDatosInicioJuego(Actualizacion act) {
+        listJugadores = new ArrayList();
+        List<Jugador> jugadores = act.getlistaJugador();
+        jugadores.forEach(jug -> {
+            if (jug.getNombre().equals(actual.getNombre())) {
+                actual.setCartasLogicasActuales(jug.getCartasLogicasActuales());
+            } else {
+                jug.activate();                              //Inicializa litas visuales de cartas
+                listJugadores.add(jug);
+            }
+        });
+        actualizarGraficos();
+    }
+
+    private void actualizarGraficos() {
+        vBoxCartas.getChildren().clear();
+        hBoxJugadores.getChildren().clear();
+        actual.cargarCartasVisuales(true);
+        listJugadores.forEach(jug -> jug.cargarCartasVisuales(false));
+        refrescarBarraDeCartasPropias();
+        refrescarBarraDeContrincantes();
+    }
+
+    public void refrescarBarraDeCartasPropias() {
+        actual.getCartasActuales().forEach(carta -> {
+            vBoxCartas.getChildren().add(carta);
+        });
+        vBoxCartas.getChildren().forEach(cart -> {
+            cart.setOnDragDetected((MouseEvent event) -> {
+                cartaJugadaActual = (Carta)cart;
+                Dragboard db = cart.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                content.putImage(((Carta)cart).getImage());
+                content.putString("");
+                db.setContent(content);
                 event.consume();
             });
         });
         campoJuego.forEach(act -> {
-            act.setOnDragDropped(value -> {
-                Dragboard db = value.getDragboard();
+            act.setOnDragOver(event -> {
+                event.acceptTransferModes(TransferMode.MOVE);
+                event.consume();
+            });
+        });
+        campoJuego.forEach(act -> {
+            act.setOnDragDropped(event -> {
+                Dragboard db = event.getDragboard();
                 if (db.hasImage()) {
-                    value.setDropCompleted(true);
-                    ImageView cartaColocada = new ImageView(db.getImage());
-                    cartaColocada.setFitHeight(100);
-                    cartaColocada.setFitWidth(100);
-                    act.getChildren().add(cartaColocada);
-                    vBoxCartas.getChildren().clear();
-                    eliminarCartaDeMazo();
-                   new ComunicadorSinRespuesta().ActualizarCartas(listaJ);
-                    //actualizarListasDeJuegoActualizada();
+                    event.setDropCompleted(true);
+                    actual.ponerCartaEnLaMesa(cartaJugadaActual);
+                    act.getChildren().add(cartaJugadaActual);
                 }
-                value.consume();
+                event.consume();
             });
         });
     }
-//Eliminar las cartas despues de la lista de cartas de jugador
 
- public void eliminarCartaDeMazo() {
-        listaJ.forEach(jugador -> {
+    public void refrescarBarraDeContrincantes() {
+        listJugadores.forEach(jug -> {
+            ImageView perfilJugador1 = new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar()));
+            Label labelPerfilContricante = new Label(jug.getNombre());
+            labelPerfilContricante.setGraphic(perfilJugador1);
+            labelPerfilContricante.setOnMouseClicked((MouseEvent event) -> {
+                labelContricante.setText(jug.getNombre());
+                labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar())));
+                //labelCartasContricantes.setText("Cartas Actuales:" + jug.verLista().size());
+                flowMesaContrincante.getChildren().clear();
+                flowMesaContrincante.getChildren().addAll(jug.getCartasJugadas());
+            });
+            hBoxJugadores.getChildren().add(labelPerfilContricante);
+        });
+    }
+
+    private void OnActionSolicitarCarta(ActionEvent event) {
+        MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
+        listJugadores.forEach(jugador -> {
             if (jugador.getNombre().equals(actual.getNombre())) {
-                for (int x = 0; x < jugador.verLista().size(); x++) {
-                    if (jugador.verLista().get(x).getTipo().equals(cartaJugadaActual.getTipo()) && jugador.verLista().get(x).getColor().equals(cartaJugadaActual.getColor())) {
-                        jugador.verCartasTablero().add(cartaJugadaActual);
-                        jugador.verLista().remove(x);
-                        x=jugador.verLista().size();
-                    }
-
-                }
+                jugador.misCartas(resp);
             }
         });
-    }
-//Actuliza la lista de cartas de jugador
-
-    public void actualizarListasDeJuego(Actualizacion act) {
-vBoxCartas.getChildren().clear();
-hBoxJugadores.getChildren().clear();
-        listaJ = act.getlistaJugador();
-        listaJ.forEach(jugadorD -> {
-            if (actual.getNombre().equals(jugadorD.getNombre())) {
-                jugadorD.verLista().forEach((MarcoCarta misCartas) -> {
-                    ImageView carta = new ImageView();
-                    carta.setFitHeight(100);
-                    carta.setFitWidth(100);
-                    if(misCartas.getColor().equals("Sincolor")){
-                     carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getTipo()+".png"));
-                    }else{
-                        carta.setImage(new Image("virusclient/resources/cartas/" + misCartas.getTipo()+misCartas.getColor()+".png"));
-                    }
-
-                    carta.setOnDragDetected((MouseEvent event) -> {
-                        ima = carta;
-                        cartaJugadaActual = misCartas;
-                        Dragboard db = carta.startDragAndDrop(TransferMode.COPY);
-                        ClipboardContent content = new ClipboardContent();
-                        content.putImage(carta.getImage());
-                        content.putString("");
-
-                        db.setContent(content);
-                        event.consume();
-                    });
-                    vBoxCartas.getChildren().add(carta);
-                });
-            } else {
-//Crea las perfiles
-                ImageView perfilJugador1 = new ImageView();
-                Label labelPerfilContricante = new Label();
-                labelPerfilContricante.setText(jugadorD.getNombre());
-                perfilJugador1.setImage(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar()));
-                labelPerfilContricante.setGraphic(perfilJugador1);
-                //Evento de click para los  perfiles de jugador
-                labelPerfilContricante.setOnMouseClicked((MouseEvent t) -> {
-                    labelContricante.setText(jugadorD.getNombre());
-                    labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jugadorD.getNombAvatar())));
-                    labelCartasContricantes.setText("Cartas Actuales:" + jugadorD.verLista().size());
-                });
-                hBoxJugadores.getChildren().add(labelPerfilContricante);
-            }
-        });
+        new ComunicadorSinRespuesta().ActualizarCartas(listJugadores);
     }
 
-    public void actualizarListasDeJuegoActualizada() {
-//        List<Jugador> 
-//        listaJ = act.getlistaJugador();
-        listaJ.forEach(jugadorD -> {
-            if (actual.getNombre().equals(jugadorD.getNombre())) {
-                jugadorD.verLista().forEach((MarcoCarta misCartas) -> {
-                    ImageView carta = new ImageView();
-                    carta.setFitHeight(100);
-                    carta.setFitWidth(100);
-                    carta.setOnDragDetected((MouseEvent event) -> {
-                        ima = carta;
-                        cartaJugadaActual = misCartas;
-                        Dragboard db = carta.startDragAndDrop(TransferMode.COPY);
-                        ClipboardContent content = new ClipboardContent();
-                        content.putImage(carta.getImage());
-                        content.putString("");
+    public void activarFuncuinesDeArrastreDeCartas(Carta carta) {
 
-                        db.setContent(content);
-                        event.consume();
-                    });
-                    vBoxCartas.getChildren().add(carta);
-                });
-            }
-        });
     }
 
-    public void CargarJugadores() {
+    public void cargarDatosJugador() {
         ImageView perfilJugador = new ImageView();
         Label nombre = new Label();
         nombre.setText(actual.getNombre());
         perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + actual.getNombAvatar()));
         nombre.setGraphic(perfilJugador);
         panelPropio.getChildren().add(nombre);
-    }
-
-    @FXML
-    private void OnActionSolicitarCarta(ActionEvent event) {
-       MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
-        listaJ.forEach(jugador -> {
-            if (jugador.getNombre().equals(actual.getNombre())) {
-                jugador.misCartas(resp);
-
-            }
-        });
-
-        new ComunicadorSinRespuesta().ActualizarCartas(listaJ);   
     }
 
 }

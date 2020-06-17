@@ -6,6 +6,7 @@
 package virusclient.model;
 
 import com.google.gson.annotations.SerializedName;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -13,26 +14,30 @@ import javafx.scene.image.ImageView;
  * @author rober
  */
 public class Carta extends ImageView {
- 
+
     @SerializedName("tipoCarta")
     String tipoCarta;
     @SerializedName("color")
     String color;
-      private String getColor(){
-    return  color;
-   }
-    public Carta(String tipo,String color){
-     this.color=color;
-     this.tipoCarta=tipo; 
+
+    public Carta(String tipo, String color, boolean cartasTamañoCompleto) {
+        this.color = color;
+        this.tipoCarta = tipo;
+        if ("Sincolor".equals(color)) {
+            this.setImage(new Image("virusclient/resources/cartas/" + tipo + ".png"));
+        } else {
+            this.setImage(new Image("virusclient/resources/cartas/" + tipo + color + ".png"));
+        }
+        this.setFitHeight(cartasTamañoCompleto ? 140 : 110);
+        this.setFitWidth(cartasTamañoCompleto ? 110 : 85);
     }
 
-   private String getTipo(){
-    return  tipoCarta;
-   }
+    private String getColor() {
+        return color;
+    }
 
-    
-    
-    
-    //AQUI ES LALO
-   
+    private String getTipo() {
+        return tipoCarta;
+    }
+
 }
