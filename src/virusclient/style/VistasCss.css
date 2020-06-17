@@ -86,3 +86,11 @@ and open the template in the editor.
     -fx-background-radius: 10px;
     -fx-font: bold 20pt "Bahnschrift"
 }
+
+#maso{
+    -fx-image:url("../resources/cartas/Reverso.png");
+}
+
+#desecho{
+    -fx-image:url("../resources/cartas/Desecho.png");
+}

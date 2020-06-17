@@ -32,11 +32,11 @@ public class Carta extends ImageView {
         this.setFitWidth(cartasTamañoCompleto ? 110 : 85);
     }
 
-    private String getColor() {
+    public String getColor() {
         return color;
     }
 
-    private String getTipo() {
+    public String getTipo() {
         return tipoCarta;
     }
 
