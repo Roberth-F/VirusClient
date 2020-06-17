@@ -37,17 +37,32 @@ public class Jugador {
      * @param cartasTamañoCompleto Indica si las cartas son de tamaño completo o
      * reducido
      */
-    public void cargarCartasVisuales(boolean cartasTamañoCompleto) {
+    public void refrescarCartasVisuales(boolean cartasTamañoCompleto) {
         cartasActuales.clear();
         cartasJugadas.clear();
         cartasLogicasActuales.forEach(act -> {
             cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto));
         });
+        cartasLogicasJugadas.forEach(cart -> {
+            cartasJugadas.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto));
+        });
     }
-    
-    public void ponerCartaEnLaMesa(Carta cartaBuscada){
+
+    public void ponerCartaEnLaMesa(Carta cartaBuscada) {
         cartasActuales.remove(cartaBuscada);
         cartasJugadas.add(cartaBuscada);
+        refrescarCartasLogias();
+    }
+
+    public void refrescarCartasLogias() {
+        cartasLogicasActuales.clear();
+        cartasLogicasJugadas.clear();
+        cartasActuales.forEach(cart -> {
+            cartasLogicasActuales.add(new MarcoCarta(cart.getTipo(), cart.getColor()));
+        });
+        cartasJugadas.forEach(cart -> {
+            cartasLogicasJugadas.add(new MarcoCarta(cart.getTipo(), cart.getColor()));
+        });
     }
 
     public String getNombre() {
