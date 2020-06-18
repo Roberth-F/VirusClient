@@ -5,6 +5,8 @@
  */
 package virusclient.util;
 
+import javafx.scene.layout.VBox;
+import virusclient.model.Carta;
 import virusclient.model.Jugador;
 
 /**
@@ -37,8 +39,24 @@ public class Lineamientos {
         return jugador.getCartasActuales().size() == 3;
     }
 
-    public static boolean puedeJugar() {
-        return enTurno && !botoCartas;
+    public static boolean puedeJugar(Carta carta, VBox container) {
+        if (enTurno && !botoCartas && !haJugado) {
+            if (!isOrganoEnCampoVacio(carta, container)) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private static boolean isOrganoEnCampoVacio(Carta carta, VBox container) {
+        String tipo = carta.getTipo();
+        if ("Cerebro".equals(tipo) || "Estomago".equals(tipo) || "Corazon".equals(tipo) || "Hueso".equals(tipo) || "Organo".equals(tipo)) {
+            return container.getChildren().isEmpty();
+        }
+        return false;
     }
 
     public static void enTurno(boolean turno) {
@@ -58,5 +76,5 @@ public class Lineamientos {
     public static boolean isJugando() {
         return haJugado;
     }
-    
+
 }

@@ -84,8 +84,8 @@ public class PartidaController extends Rechargeable implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         AppContext.getInstance().set("SalaDeJuego", this);
         campoJuego.addAll(Arrays.asList(vbCartaMesa1, vbCartaMesa2, vbCartaMesa3, vbCartaMesa4, vbCartaMesa5));
+        campoJuego.forEach(container -> container.setSpacing(-120));
         this.cargarDatosJugador();
-        //this.eventoColocarCartasDeJugador();
     }
 
     @Override
@@ -132,7 +132,7 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
         campoJuego.forEach(act -> {
             act.setOnDragOver(event -> {
-                if (Lineamientos.puedeJugar()) {
+                if (Lineamientos.puedeJugar(cartaJugadaActual, act)) {
                     event.acceptTransferModes(TransferMode.MOVE);
                 }
                 event.consume();
@@ -145,6 +145,7 @@ public class PartidaController extends Rechargeable implements Initializable {
                 if (db.hasImage()) {
                     event.setDropCompleted(true);
                     jugadorResidente.ponerCartaEnLaMesa(cartaJugadaActual);
+                    btnCambiarTurno.setDisable(true);
                     act.getChildren().add(cartaJugadaActual);
                 }
                 event.consume();
