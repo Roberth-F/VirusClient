@@ -117,7 +117,13 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     public void refrescarDatosDeJuego(Actualizacion act) {
-
+        listJugadores.forEach(jugador -> {
+            act.getRefresherList().forEach(refresher -> {
+                jugador.copyCarts(refresher);
+            });
+        });
+        jugadorResidente.copyCarts(Jugador.extraerDeLista(act.getRefresherList(), jugadorResidente.getNombre()));
+        actualizarGraficos();
     }
 
     private void actualizarGraficos() {
@@ -161,6 +167,7 @@ public class PartidaController extends Rechargeable implements Initializable {
                     jugadorResidente.ponerCartaEnLaMesa(cartaJugadaActual);
                     btnCambiarTurno.setDisable(true);
                     act.getChildren().add(cartaJugadaActual);
+                    enviarActualizacionDeJuego();
                 }
                 event.consume();
             });
@@ -197,6 +204,7 @@ public class PartidaController extends Rechargeable implements Initializable {
             jugadorResidente.getCartasLogicasActuales().add(resp);
             jugadorResidente.refrescarCartasVisuales(true);
             refrescarBarraDeCartasPropias();
+            enviarActualizacionDeJuego();
             if (LineamientosGenerales.isJugando() && LineamientosGenerales.esMomentoDeCambiarTurno(jugadorResidente)) {
                 onClickCambiarTurno(new ActionEvent());
             }
@@ -222,6 +230,7 @@ public class PartidaController extends Rechargeable implements Initializable {
             jugadorResidente.refrescarCartasLogias();
             desecharCartas(Arrays.asList(toDesecho));
             refrescarBarraDeCartasPropias();
+            enviarActualizacionDeJuego();
         }
         event.consume();
     }
@@ -249,6 +258,5 @@ public class PartidaController extends Rechargeable implements Initializable {
         updateLis.addAll(listJugadores);
         updateLis.add(jugadorResidente);
         new ComunicadorSinRespuesta().actualizarContrincantes(updateLis);
-        
     }
 }

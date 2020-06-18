@@ -100,7 +100,7 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
                 if ((AppContext.getInstance().get("cargarPartida")) != null) {
 
                     System.out.println("entre");
-                    Platform.runLater(()-> {
+                    Platform.runLater(() -> {
                         TbxControl.getInstance().view("Partida");
                         tiempoActualizar.cancel();
                     });
@@ -142,16 +142,17 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
 
     @FXML
     private void OnAcionEsotyListo(ActionEvent event) {
+        btnIniciarJuego.setDisable(true);
         if (((Jugador) AppContext.getInstance().get("jugador")).isHost()) {
             Respuesta resp = new ComunicadorConRespuesta().iniciarJuego();
             if (!resp.getEstado()) {
                 new Mensaje().show(Alert.AlertType.WARNING, "Atención", resp.getMensaje());
             } else {
+
                 new ComunicadorSinRespuesta().forzarInicioDeJuego();
             }
         } else {
             new ComunicadorSinRespuesta().votarPorInicioDeJuego();
-            btnIniciarJuego.setDisable(true);
         }
     }
 

@@ -33,6 +33,7 @@ public class VirusClient extends Application {
 
     @Override
     public void start(Stage stage) {
+        stage.setTitle("Covid-18");
         TbxControl.getInstance().startControl(stage, null, null);
         TbxControl.getInstance().onAppClosing(event -> {
             new ComunicadorSinRespuesta().solicitarSalida();

@@ -229,6 +229,7 @@ public class Peticion {
             System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
             Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
         }
+        this.nombreJugador = jugadores.get(jugadores.size() - 1).getNombre(); //Carga nombre de jugador que envía la petición.
     }
         public void addActualizacionMensaje(List<ChatGlobal>chat) {
         try {

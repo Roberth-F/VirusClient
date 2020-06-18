@@ -7,6 +7,7 @@ package virusclient.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -147,6 +148,27 @@ public class Jugador {
     public void activate() {
         this.cartasActuales = new ArrayList();
         this.cartasJugadas = new ArrayList();
+    }
+
+    public static Jugador extraerDeLista(List<Jugador> jug, String nombre) {
+        Jugador toReturn = null;
+        for (Jugador jugador : jug) {
+            if (jugador.getNombre().equals(nombre)) {
+                toReturn = jugador;
+                break;
+            }
+        }
+        jug.remove(toReturn);
+        return toReturn;
+    }
+
+    public void copyCarts(Jugador jug) {
+        if (jug.getNombre().equals(this.getNombre())) {
+            this.cartasLogicasActuales.clear();
+            this.cartasLogicasJugadas.clear();
+            this.cartasLogicasActuales.addAll(jug.getCartasLogicasActuales());
+            this.cartasLogicasJugadas.addAll(jug.getCartasLogicasJugadas());
+        }
     }
 
 }
