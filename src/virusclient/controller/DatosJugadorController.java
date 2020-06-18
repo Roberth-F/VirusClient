@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import unaplanilla2.util.Mensaje;
+import virusclient.util.Mensaje;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 import virusclient.util.TbxControl;

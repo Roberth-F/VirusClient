@@ -58,5 +58,9 @@ public class Carta extends ImageView {
     public void setContainerId(int containerId) {
         this.containerId = containerId;
     }
-
+    
+    public void toSlowFormat(){
+        this.setFitHeight(110);
+        this.setFitWidth(85);
+    }
 }
