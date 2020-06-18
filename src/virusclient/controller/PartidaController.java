@@ -132,7 +132,7 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
         campoJuego.forEach(act -> {
             act.setOnDragOver(event -> {
-                if (Lineamientos.puedeJugar(cartaJugadaActual, act)) {
+                if (Lineamientos.puedeJugar(cartaJugadaActual, act, jugadorResidente.getCartasJugadas())) {
                     event.acceptTransferModes(TransferMode.MOVE);
                 }
                 event.consume();
