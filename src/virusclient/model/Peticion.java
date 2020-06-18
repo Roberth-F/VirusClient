@@ -36,8 +36,11 @@ public class Peticion {
     private int puertoImadiato;  //En caso de ser petición con respuesta a este puerto se envia la respuerta.
     @SerializedName("avatar")
     private String nombreAvatar;
-@SerializedName("jugadores")
+    @SerializedName("jugadores")
     private List<Jugador> jugadores;
+    @SerializedName("cartasDesecho")
+    private List<MarcoCarta> castasDesecho;
+
     public Peticion() {
     }
 
@@ -77,6 +80,11 @@ public class Peticion {
     public void yoEstoyListo() {
         this.nombreJugador = ((Jugador) AppContext.getInstance().get("jugador")).getNombre();
         this.metodo = "nuevoJugadorListo";
+    }
+    
+    public void desecharCartas(List<MarcoCarta> marcoCartas){
+        this.metodo = "desecharCartas";
+        this.castasDesecho = marcoCartas;
     }
 
     /**
@@ -206,20 +214,22 @@ public class Peticion {
     public String getNombreAvatar() {
         return nombreAvatar;
     }
-       public void addActualizacion(List<Jugador>jugadores) {
+
+    public void addActualizacion(List<Jugador> jugadores) {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException UE) {
             System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
             Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
         }
-  
+
         this.metodo = "actualizarLista";
         this.jugadores = jugadores;
-       // this.puertoImadiato = puertoImediato;
-        
+        // this.puertoImadiato = puertoImediato;
+
     }
-   public void solicitarCarta(int puertoImediato) {
+
+    public void solicitarCarta(int puertoImediato) {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException ex) {
@@ -227,5 +237,9 @@ public class Peticion {
         }
         this.puertoImadiato = puertoImediato;
         this.metodo = "solicitarCarta";
+    }
+    
+    public void toCambioDeTurno(){
+        metodo = "pasarTurno";
     }
 }

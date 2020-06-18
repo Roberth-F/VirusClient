@@ -13,8 +13,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public class MarcoCarta {
 
-    @SerializedName("nombreCarta")
-    private String nombre;
     @SerializedName("tipoCarta")
     private String tipo;
     @SerializedName("numeroCarta")
@@ -31,17 +29,6 @@ public class MarcoCarta {
         this.tipo = tipo;
     }
 
-    public MarcoCarta(String nombreCarta, String tipoCarta, int numeroCarta) {
-        this.nombre = nombreCarta;
-        this.tipo = tipoCarta;
-        this.cantidad = numeroCarta;
-    }
-
-    public void setNombre(String nombre) {//Corazon
-        this.nombre = nombre;
-
-    }
-
     public void setNumeroDeCarta(int numeroCarta) {
         this.cantidad = numeroCarta;
     }
@@ -55,10 +42,6 @@ public class MarcoCarta {
 
     }
 
-    public String getNombreCarta() {
-        return nombre;
-    }
-
     public String getTipo() {
         return tipo;
     }
@@ -66,5 +49,5 @@ public class MarcoCarta {
     public Carta toVisualCart(boolean tamannoCompleto) {
         return new Carta(this.tipo, this.color, tamannoCompleto);
     }
-    
+
 }
