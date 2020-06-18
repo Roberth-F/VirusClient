@@ -81,8 +81,8 @@ public class Peticion {
         this.nombreJugador = ((Jugador) AppContext.getInstance().get("jugador")).getNombre();
         this.metodo = "nuevoJugadorListo";
     }
-    
-    public void desecharCartas(List<MarcoCarta> marcoCartas){
+
+    public void desecharCartas(List<MarcoCarta> marcoCartas) {
         this.metodo = "desecharCartas";
         this.castasDesecho = marcoCartas;
     }
@@ -216,17 +216,15 @@ public class Peticion {
     }
 
     public void addActualizacion(List<Jugador> jugadores) {
+        this.metodo = "actualizarContrincantes";
+        this.jugadores = jugadores;
+        this.puerto = (int) AppContext.getInstance().get("mainPort");
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException UE) {
             System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
             Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
         }
-
-        this.metodo = "actualizarLista";
-        this.jugadores = jugadores;
-        // this.puertoImadiato = puertoImediato;
-
     }
 
     public void solicitarCarta(int puertoImediato) {
@@ -238,8 +236,8 @@ public class Peticion {
         this.puertoImadiato = puertoImediato;
         this.metodo = "solicitarCarta";
     }
-    
-    public void toCambioDeTurno(){
+
+    public void toCambioDeTurno() {
         metodo = "pasarTurno";
     }
 }

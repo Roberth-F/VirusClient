@@ -89,12 +89,12 @@ public class ComunicadorSinRespuesta {
         }
     }
 
-    public void ActualizarCartas(List<Jugador> jugador) {
+    public void actualizarContrincantes(List<Jugador> jugadores) {
         try {
             Socket sock = new Socket(serverIp, 7777);
             DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
             Peticion pet = new Peticion();
-            pet.addActualizacion(jugador);
+            pet.addActualizacion(jugadores);
             String Json = new Gson().toJson(pet);
             datos.writeUTF(Json);
             sock.getOutputStream().close();

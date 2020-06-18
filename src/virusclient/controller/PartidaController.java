@@ -5,6 +5,7 @@
  */
 package virusclient.controller;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -175,8 +176,6 @@ public class PartidaController extends Rechargeable implements Initializable {
             labelPerfilContricante.setOnMouseClicked((MouseEvent event) -> {
                 labelContricante.setText(jug.getNombre());
                 labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar())));
-//                flowMesaContrincante.getChildren().clear();
-//                flowMesaContrincante.getChildren().addAll(jug.getCartasJugadas());
             });
             hBoxJugadores.getChildren().add(labelPerfilContricante);
         });
@@ -246,6 +245,10 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     private void enviarActualizacionDeJuego() {
+        List<Jugador> updateLis = new ArrayList();
+        updateLis.addAll(listJugadores);
+        updateLis.add(jugadorResidente);
+        new ComunicadorSinRespuesta().actualizarContrincantes(updateLis);
         
     }
 }
