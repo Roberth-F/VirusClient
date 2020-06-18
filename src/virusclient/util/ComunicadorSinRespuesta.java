@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import virusclient.model.ChatGlobal;
 import virusclient.model.Jugador;
+import virusclient.model.MarcoCarta;
 
 import virusclient.model.Peticion;
 
@@ -105,13 +106,49 @@ public class ComunicadorSinRespuesta {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, io);
         }
     }
-    
-  public void ActualizarCartas(List<Jugador>jugador){
+
+    public void ActualizarCartas(List<Jugador> jugador) {
         try {
             Socket sock = new Socket(serverIp, 7777);
             DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
             Peticion pet = new Peticion();
             pet.addActualizacion(jugador);
+            String Json = new Gson().toJson(pet);
+            datos.writeUTF(Json);
+            sock.getOutputStream().close();
+            datos.close();
+            sock.close();
+        } catch (UnknownHostException UHE) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicadorSinRespuesta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void desecharCartas(List<MarcoCarta> desecho) {
+        try {
+            Socket sock = new Socket(serverIp, 7777);
+            DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+            Peticion pet = new Peticion();
+            pet.desecharCartas(desecho);
+            String Json = new Gson().toJson(pet);
+            datos.writeUTF(Json);
+            sock.getOutputStream().close();
+            datos.close();
+            sock.close();
+        } catch (UnknownHostException UHE) {
+            Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UHE);
+        } catch (IOException ex) {
+            Logger.getLogger(ComunicadorSinRespuesta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void cambiarTurno() {
+        try {
+            Socket sock = new Socket(serverIp, 7777);
+            DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
+            Peticion pet = new Peticion();
+            pet.toCambioDeTurno();
             String Json = new Gson().toJson(pet);
             datos.writeUTF(Json);
             sock.getOutputStream().close();

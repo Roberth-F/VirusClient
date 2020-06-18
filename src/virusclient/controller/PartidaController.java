@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,11 +28,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import virusclient.model.Actualizacion;
 import virusclient.model.Carta;
+import virusclient.util.Lineamientos;
 import virusclient.model.MarcoCarta;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
+import virusclient.util.MensajePopUp;
 
 /**
  * FXML Controller class
@@ -68,6 +71,8 @@ public class PartidaController extends Rechargeable implements Initializable {
     private Carta cartaJugadaActual;
     private final List<VBox> campoJuego = new ArrayList();
     private final Jugador jugadorResidente = (Jugador) AppContext.getInstance().get("jugador");
+    @FXML
+    private Button btnCambiarTurno;
 
     /**
      * Initializes the controller class.
@@ -127,13 +132,16 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
         campoJuego.forEach(act -> {
             act.setOnDragOver(event -> {
-                event.acceptTransferModes(TransferMode.MOVE);
+                if (Lineamientos.puedeJugar()) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
                 event.consume();
             });
         });
         campoJuego.forEach(act -> {
             act.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
+                Lineamientos.setJugando(true);
                 if (db.hasImage()) {
                     event.setDropCompleted(true);
                     jugadorResidente.ponerCartaEnLaMesa(cartaJugadaActual);
@@ -160,16 +168,6 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
     }
 
-    private void OnActionSolicitarCarta(ActionEvent event) {
-        MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
-        listJugadores.forEach(jugador -> {
-            if (jugador.getNombre().equals(jugadorResidente.getNombre())) {
-                jugador.misCartas(resp);
-            }
-        });
-        new ComunicadorSinRespuesta().ActualizarCartas(listJugadores);
-    }
-
     public void cargarDatosJugador() {
         ImageView perfilJugador = new ImageView();
         Label nombre = new Label();
@@ -181,15 +179,22 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     @FXML
     private void onClickMazo(MouseEvent event) {
-        MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
-        jugadorResidente.getCartasLogicasActuales().add(resp);
-        jugadorResidente.refrescarCartasVisuales(true);
-        refrescarBarraDeCartasPropias();
+        if (Lineamientos.puedeTomarCartas(jugadorResidente)) {
+            MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
+            jugadorResidente.getCartasLogicasActuales().add(resp);
+            jugadorResidente.refrescarCartasVisuales(true);
+            refrescarBarraDeCartasPropias();
+            if (Lineamientos.isJugando() && Lineamientos.esMomentoDeCambiarTurno(jugadorResidente)) {
+                onClickCambiarTurno(new ActionEvent());
+            }
+        }
     }
 
     @FXML
     private void onDragOverDesecho(DragEvent event) {
-        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        if (Lineamientos.puedeDesecharCartas()) {
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        }
         event.consume();
     }
 
@@ -197,16 +202,33 @@ public class PartidaController extends Rechargeable implements Initializable {
     private void onDragDropedDesecho(DragEvent event) {
         Dragboard db = event.getDragboard();
         if (db.hasImage()) {
+            Lineamientos.setBotoCartas(true);
             event.setDropCompleted(true);
             jugadorResidente.getCartasActuales().remove(cartaJugadaActual);
             MarcoCarta toDesecho = cartaJugadaActual.toLogicCart();
             jugadorResidente.refrescarCartasLogias();
             desecharCartas(Arrays.asList(toDesecho));
+            refrescarBarraDeCartasPropias();
         }
         event.consume();
     }
 
-    public void desecharCartas(List<MarcoCarta> cartaList) {
-        System.out.println("virusclient.controller.PartidaController.desecharCartas()");
+    public void turnoDeJugar(Actualizacion act) {
+        Lineamientos.enTurno(true);
+        btnCambiarTurno.setDisable(false);
+        new MensajePopUp().notifyMensajeInformacion("Atencion", "Es tu turno de jugar");
     }
+
+    public void desecharCartas(List<MarcoCarta> cartaList) {
+        new ComunicadorSinRespuesta().desecharCartas(cartaList);
+    }
+
+    @FXML
+    private void onClickCambiarTurno(ActionEvent event) {
+        btnCambiarTurno.setDisable(true);
+        Lineamientos.enTurno(false);
+        new MensajePopUp().notifyMensajeInformacion("Atencion", "Tu turno ha acabado");
+        new ComunicadorSinRespuesta().cambiarTurno();
+    }
+
 }
