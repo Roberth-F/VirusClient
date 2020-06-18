@@ -206,10 +206,10 @@ public class ComunicadorConRespuesta {
             return cart;
         } catch (UnknownHostException UE) {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UE);
-            return new MarcoCarta("", "");
+            return null;
         } catch (IOException IO) {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, IO);
-            return new MarcoCarta("", "");
+            return null;
         }
     }
 }

@@ -10,16 +10,18 @@ import javafx.scene.image.ImageView;
 
 /**
  *
- * @author rober
+ * @author roberth 😊
  */
 public class Carta extends ImageView {
 
-    String tipoCarta;
-    String color;
+    private String tipoCarta;
+    private String color;
+    private int containerId;
 
-    public Carta(String tipo, String color, boolean cartasTamañoCompleto) {
+    public Carta(String tipo, String color, boolean cartasTamañoCompleto, int containerId) {
         this.color = color;
         this.tipoCarta = tipo;
+        this.containerId = containerId;
         if ("Sincolor".equals(color)) {
             this.setImage(new Image("virusclient/resources/cartas/" + tipo + ".png"));
         } else {
@@ -37,7 +39,24 @@ public class Carta extends ImageView {
         return tipoCarta;
     }
 
-    public MarcoCarta toLogicCart() {
-        return new MarcoCarta(this.tipoCarta, this.color);
+    public void setTipoCarta(String tipoCarta) {
+        this.tipoCarta = tipoCarta;
     }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public MarcoCarta toLogicCart() {
+        return new MarcoCarta(this.tipoCarta, this.color, this.containerId);
+    }
+
+    public int getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(int containerId) {
+        this.containerId = containerId;
+    }
+
 }

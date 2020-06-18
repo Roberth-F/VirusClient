@@ -41,10 +41,10 @@ public class Jugador {
         cartasActuales.clear();
         cartasJugadas.clear();
         cartasLogicasActuales.forEach(act -> {
-            cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto));
+            cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto, act.getContainerId()));
         });
         cartasLogicasJugadas.forEach(cart -> {
-            cartasJugadas.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto));
+            cartasJugadas.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto, cart.getContainerId()));
         });
     }
 
@@ -58,10 +58,10 @@ public class Jugador {
         cartasLogicasActuales.clear();
         cartasLogicasJugadas.clear();
         cartasActuales.forEach(cart -> {
-            cartasLogicasActuales.add(new MarcoCarta(cart.getTipo(), cart.getColor()));
+            cartasLogicasActuales.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
         });
         cartasJugadas.forEach(cart -> {
-            cartasLogicasJugadas.add(new MarcoCarta(cart.getTipo(), cart.getColor()));
+            cartasLogicasJugadas.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
         });
     }
 
