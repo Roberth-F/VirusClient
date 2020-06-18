@@ -14,7 +14,7 @@ import virusclient.model.Jugador;
  *
  * @author roberth 😊
  */
-public class Lineamientos {
+public class LineamientosGenerales {
 
     private static boolean haJugado = false;
     private static boolean botoCartas = false;
@@ -42,10 +42,10 @@ public class Lineamientos {
 
     public static boolean puedeJugar(Carta carta, VBox container, List<Carta> cartasEnMesa) {
         if (enTurno && !botoCartas && !haJugado) {
-            if (!isOrganoEnCampoVacio(carta, container)) {
-                return false;
-            } else {
+            if (isOrganoEnCampoVacio(carta, container)) {
                 return !yaEsteOrganoEstaPuesto(cartasEnMesa, carta);
+            } else {
+                return false;
             }
         } else {
             return false;

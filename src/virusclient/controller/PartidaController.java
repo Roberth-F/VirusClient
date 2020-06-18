@@ -28,7 +28,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import virusclient.model.Actualizacion;
 import virusclient.model.Carta;
-import virusclient.util.Lineamientos;
+import virusclient.util.LineamientosGenerales;
 import virusclient.model.MarcoCarta;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
@@ -66,13 +66,21 @@ public class PartidaController extends Rechargeable implements Initializable {
     @FXML
     private VBox vbCartaMesa5;
     @FXML
-    private FlowPane flowMesaContrincante;
+    private Button btnCambiarTurno;
+    @FXML
+    private VBox vbCartaEnemiga1;
+    @FXML
+    private VBox vbCartaEnemiga2;
+    @FXML
+    private VBox vbCartaEnemiga4;
+    @FXML
+    private VBox vbCartaEnemiga5;
+    @FXML
+    private VBox vbCartaEnemiga3;
     private List<Jugador> listJugadores;
     private Carta cartaJugadaActual;
     private final List<VBox> campoJuego = new ArrayList();
     private final Jugador jugadorResidente = (Jugador) AppContext.getInstance().get("jugador");
-    @FXML
-    private Button btnCambiarTurno;
 
     /**
      * Initializes the controller class.
@@ -107,6 +115,10 @@ public class PartidaController extends Rechargeable implements Initializable {
         actualizarGraficos();
     }
 
+    public void refrescarDatosDeJuego(Actualizacion act) {
+
+    }
+
     private void actualizarGraficos() {
         jugadorResidente.refrescarCartasVisuales(true);
         listJugadores.forEach(jug -> jug.refrescarCartasVisuales(false));
@@ -132,7 +144,7 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
         campoJuego.forEach(act -> {
             act.setOnDragOver(event -> {
-                if (Lineamientos.puedeJugar(cartaJugadaActual, act, jugadorResidente.getCartasJugadas())) {
+                if (LineamientosGenerales.puedeJugar(cartaJugadaActual, act, jugadorResidente.getCartasJugadas())) {
                     event.acceptTransferModes(TransferMode.MOVE);
                 }
                 event.consume();
@@ -141,9 +153,10 @@ public class PartidaController extends Rechargeable implements Initializable {
         campoJuego.forEach(act -> {
             act.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
-                Lineamientos.setJugando(true);
+                LineamientosGenerales.setJugando(true);
                 if (db.hasImage()) {
                     event.setDropCompleted(true);
+                    cartaJugadaActual.setContainerId(Integer.valueOf(act.getId()));
                     jugadorResidente.ponerCartaEnLaMesa(cartaJugadaActual);
                     btnCambiarTurno.setDisable(true);
                     act.getChildren().add(cartaJugadaActual);
@@ -162,8 +175,8 @@ public class PartidaController extends Rechargeable implements Initializable {
             labelPerfilContricante.setOnMouseClicked((MouseEvent event) -> {
                 labelContricante.setText(jug.getNombre());
                 labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar())));
-                flowMesaContrincante.getChildren().clear();
-                flowMesaContrincante.getChildren().addAll(jug.getCartasJugadas());
+//                flowMesaContrincante.getChildren().clear();
+//                flowMesaContrincante.getChildren().addAll(jug.getCartasJugadas());
             });
             hBoxJugadores.getChildren().add(labelPerfilContricante);
         });
@@ -180,12 +193,12 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     @FXML
     private void onClickMazo(MouseEvent event) {
-        if (Lineamientos.puedeTomarCartas(jugadorResidente)) {
+        if (LineamientosGenerales.puedeTomarCartas(jugadorResidente)) {
             MarcoCarta resp = new ComunicadorConRespuesta().solicitarCarta();
             jugadorResidente.getCartasLogicasActuales().add(resp);
             jugadorResidente.refrescarCartasVisuales(true);
             refrescarBarraDeCartasPropias();
-            if (Lineamientos.isJugando() && Lineamientos.esMomentoDeCambiarTurno(jugadorResidente)) {
+            if (LineamientosGenerales.isJugando() && LineamientosGenerales.esMomentoDeCambiarTurno(jugadorResidente)) {
                 onClickCambiarTurno(new ActionEvent());
             }
         }
@@ -193,7 +206,7 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     @FXML
     private void onDragOverDesecho(DragEvent event) {
-        if (Lineamientos.puedeDesecharCartas()) {
+        if (LineamientosGenerales.puedeDesecharCartas()) {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
         }
         event.consume();
@@ -203,7 +216,7 @@ public class PartidaController extends Rechargeable implements Initializable {
     private void onDragDropedDesecho(DragEvent event) {
         Dragboard db = event.getDragboard();
         if (db.hasImage()) {
-            Lineamientos.setBotoCartas(true);
+            LineamientosGenerales.setBotoCartas(true);
             event.setDropCompleted(true);
             jugadorResidente.getCartasActuales().remove(cartaJugadaActual);
             MarcoCarta toDesecho = cartaJugadaActual.toLogicCart();
@@ -215,7 +228,7 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     public void turnoDeJugar(Actualizacion act) {
-        Lineamientos.enTurno(true);
+        LineamientosGenerales.enTurno(true);
         btnCambiarTurno.setDisable(false);
         new MensajePopUp().notifyMensajeInformacion("Atencion", "Es tu turno de jugar");
     }
@@ -227,9 +240,12 @@ public class PartidaController extends Rechargeable implements Initializable {
     @FXML
     private void onClickCambiarTurno(ActionEvent event) {
         btnCambiarTurno.setDisable(true);
-        Lineamientos.enTurno(false);
+        LineamientosGenerales.enTurno(false);
         new MensajePopUp().notifyMensajeInformacion("Atencion", "Tu turno ha acabado");
         new ComunicadorSinRespuesta().cambiarTurno();
     }
 
+    private void enviarActualizacionDeJuego() {
+        
+    }
 }
