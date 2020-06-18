@@ -5,7 +5,6 @@
  */
 package virusclient.controller;
 
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +23,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import virusclient.model.Actualizacion;
@@ -35,6 +33,7 @@ import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
+import virusclient.util.GraficacionDeCampoJuego;
 import virusclient.util.MensajePopUp;
 
 /**
@@ -81,6 +80,7 @@ public class PartidaController extends Rechargeable implements Initializable {
     private List<Jugador> listJugadores;
     private Carta cartaJugadaActual;
     private final List<VBox> campoJuego = new ArrayList();
+    private final List<VBox> campoEnemigo = new ArrayList();
     private final Jugador jugadorResidente = (Jugador) AppContext.getInstance().get("jugador");
 
     /**
@@ -93,7 +93,9 @@ public class PartidaController extends Rechargeable implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         AppContext.getInstance().set("SalaDeJuego", this);
         campoJuego.addAll(Arrays.asList(vbCartaMesa1, vbCartaMesa2, vbCartaMesa3, vbCartaMesa4, vbCartaMesa5));
+        campoEnemigo.addAll(Arrays.asList(vbCartaEnemiga1, vbCartaEnemiga2, vbCartaEnemiga3, vbCartaEnemiga4, vbCartaEnemiga5));
         campoJuego.forEach(container -> container.setSpacing(-120));
+        campoEnemigo.forEach(container -> container.setSpacing(-100));
         this.cargarDatosJugador();
     }
 
@@ -131,6 +133,11 @@ public class PartidaController extends Rechargeable implements Initializable {
         listJugadores.forEach(jug -> jug.refrescarCartasVisuales(false));
         refrescarBarraDeCartasPropias();
         refrescarBarraDeContrincantes();
+        refrescarZonasDeGuerra();
+    }
+
+    private void refrescarZonasDeGuerra() {
+        GraficacionDeCampoJuego.graficarEnCampoCaliente(campoJuego, jugadorResidente, true);
     }
 
     public void refrescarBarraDeCartasPropias() {
@@ -167,6 +174,7 @@ public class PartidaController extends Rechargeable implements Initializable {
                     jugadorResidente.ponerCartaEnLaMesa(cartaJugadaActual);
                     btnCambiarTurno.setDisable(true);
                     act.getChildren().add(cartaJugadaActual);
+                    cartaJugadaActual.setOnDragDetected(null);
                     enviarActualizacionDeJuego();
                 }
                 event.consume();
@@ -183,6 +191,7 @@ public class PartidaController extends Rechargeable implements Initializable {
             labelPerfilContricante.setOnMouseClicked((MouseEvent event) -> {
                 labelContricante.setText(jug.getNombre());
                 labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar())));
+                GraficacionDeCampoJuego.graficarEnCampoCaliente(campoEnemigo, jug, false);
             });
             hBoxJugadores.getChildren().add(labelPerfilContricante);
         });

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package unaplanilla2.util;
+package virusclient.util;
 
 import java.util.Optional;
 import javafx.scene.control.Alert;

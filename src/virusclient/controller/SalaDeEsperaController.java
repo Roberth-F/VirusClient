@@ -31,7 +31,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import unaplanilla2.util.Mensaje;
+import virusclient.util.Mensaje;
 import virusclient.model.Jugador;
 import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
