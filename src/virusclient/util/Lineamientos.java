@@ -5,6 +5,7 @@
  */
 package virusclient.util;
 
+import java.util.List;
 import javafx.scene.layout.VBox;
 import virusclient.model.Carta;
 import virusclient.model.Jugador;
@@ -39,12 +40,12 @@ public class Lineamientos {
         return jugador.getCartasActuales().size() == 3;
     }
 
-    public static boolean puedeJugar(Carta carta, VBox container) {
+    public static boolean puedeJugar(Carta carta, VBox container, List<Carta> cartasEnMesa) {
         if (enTurno && !botoCartas && !haJugado) {
             if (!isOrganoEnCampoVacio(carta, container)) {
                 return false;
             } else {
-                return true;
+                return !yaEsteOrganoEstaPuesto(cartasEnMesa, carta);
             }
         } else {
             return false;
@@ -55,6 +56,15 @@ public class Lineamientos {
         String tipo = carta.getTipo();
         if ("Cerebro".equals(tipo) || "Estomago".equals(tipo) || "Corazon".equals(tipo) || "Hueso".equals(tipo) || "Organo".equals(tipo)) {
             return container.getChildren().isEmpty();
+        }
+        return false;
+    }
+
+    private static boolean yaEsteOrganoEstaPuesto(List<Carta> organosEnMesa, Carta carta) {
+        for (Carta cart : organosEnMesa) {
+            if (cart.getTipo().equals(carta.getTipo()) && cart.getColor().equals(carta.getColor())) {
+                return true;
+            }
         }
         return false;
     }
