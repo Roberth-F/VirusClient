@@ -26,7 +26,8 @@ public class Actualizacion {
     @SerializedName("nuevosJugadores")
     private String listaJugadores;
     private String listaJugadores2;
-
+    @SerializedName("nuevosMensajes")
+    private String listaMensajes;
     /**
      * Prepara una actualización de lista de jugadores.
      *
@@ -46,7 +47,12 @@ public class Actualizacion {
         List listaJugadoresUnidos = new Gson().fromJson(listaJugadores, typeListJug);
         return listaJugadoresUnidos;
     }
-
+    public List<ChatGlobal> getlistaMensajes() {
+        Type typeListJug = new TypeToken<List<ChatGlobal>>() {
+        }.getType();
+        List listachat = new Gson().fromJson(listaMensajes, typeListJug);
+        return listachat;
+    }
     /**
      * Genera actualizacion con orden de detener el escuchador del juego.
      */
