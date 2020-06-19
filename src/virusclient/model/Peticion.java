@@ -244,6 +244,7 @@ public class Peticion {
        // this.puertoImadiato = puertoImediato;
         
     }
+
     public void solicitarCarta(int puertoImediato) {
         try {
             this.ip = InetAddress.getLocalHost().getHostAddress();
