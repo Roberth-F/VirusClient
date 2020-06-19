@@ -7,6 +7,7 @@ package virusclient.model;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,9 +23,9 @@ public class Jugador {
     @SerializedName("host:")
     private boolean host;
     public ArrayList<MarcoCarta> cartasLogicasActuales = new ArrayList();
-    public ArrayList<MarcoCarta> cartasLogicasJugadas = new ArrayList();
+    public ArrayList<List<MarcoCarta>> cartasLogicasJugadas = new ArrayList();
     public transient ArrayList<Carta> cartasActuales = new ArrayList();         //trancient evita que Gson pueda ver estos campos
-    public transient ArrayList<Carta> cartasJugadas = new ArrayList();
+    public transient ArrayList<List<Carta>> cartasJugadas = new ArrayList();
 
     public Jugador(String Nombre, String nombAvatar, boolean host) {
         this.Nombre = Nombre;
@@ -44,27 +45,44 @@ public class Jugador {
         cartasLogicasActuales.forEach(act -> {
             cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto, act.getContainerId()));
         });
-        cartasLogicasJugadas.forEach(cart -> {
-            cartasJugadas.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto, cart.getContainerId()));
+        cartasLogicasJugadas.forEach(list -> {
+            List<Carta> toAdd = new ArrayList();
+            list.forEach(cart -> {
+                toAdd.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto, cart.getContainerId()));
+            });
+            cartasJugadas.add(toAdd);
         });
     }
-
-    public void ponerCartaEnLaMesa(Carta cartaBuscada) {
-        cartasActuales.remove(cartaBuscada);
-        cartasJugadas.add(cartaBuscada);
-        refrescarCartasLogias();
-    }
-
-    public void refrescarCartasLogias() {
+    
+        public void refrescarCartasLogias() {
         cartasLogicasActuales.clear();
         cartasLogicasJugadas.clear();
         cartasActuales.forEach(cart -> {
             cartasLogicasActuales.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
         });
-        cartasJugadas.forEach(cart -> {
-            cartasLogicasJugadas.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
+        cartasJugadas.forEach(list -> {
+            List<MarcoCarta> toAdd = new ArrayList();
+            list.forEach(cart -> {
+                toAdd.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
+            });
+            cartasLogicasJugadas.add(toAdd);
         });
     }
+
+    public void ponerCartaEnLaMesa(Carta cartaBuscada) {
+        cartasActuales.remove(cartaBuscada);
+        for (List<Carta> lisC : cartasJugadas) {
+            if (lisC.get(0).getContainerId() == cartaBuscada.getContainerId()) {
+                lisC.add(cartaBuscada);
+                return;
+            }
+        }
+        List<Carta> listC = new ArrayList(Arrays.asList(cartaBuscada));
+        cartasJugadas.add(listC);
+        refrescarCartasLogias();
+    }
+
+
 
     public String getNombre() {
         return Nombre;
@@ -99,15 +117,6 @@ public class Jugador {
         return cartasLogicasActuales;
     }
 
-    public void CartasTablero(MarcoCarta cartas) {
-        cartasLogicasJugadas.add(cartas);
-    }
-
-    public ArrayList<MarcoCarta> verCartasTablero() {
-
-        return cartasLogicasJugadas;
-    }
-
     public ArrayList<MarcoCarta> getCartasLogicasActuales() {
         return cartasLogicasActuales;
     }
@@ -116,28 +125,28 @@ public class Jugador {
         this.cartasLogicasActuales = cartasLogicasActuales;
     }
 
-    public ArrayList<MarcoCarta> getCartasLogicasJugadas() {
+    public ArrayList<List<MarcoCarta>> getCartasLogicasJugadas() {
         return cartasLogicasJugadas;
     }
 
-    public void setCartasLogicasJugadas(ArrayList<MarcoCarta> cartasLogicasJugadas) {
+    public void setCartasLogicasJugadas(ArrayList<List<MarcoCarta>> cartasLogicasJugadas) {
         this.cartasLogicasJugadas = cartasLogicasJugadas;
     }
 
+    public ArrayList<List<Carta>> getCartasJugadas() {
+        return cartasJugadas;
+    }
+
+    public void setCartasJugadas(ArrayList<List<Carta>> cartasJugadas) {
+        this.cartasJugadas = cartasJugadas;
+    }
+    
     public ArrayList<Carta> getCartasActuales() {
         return cartasActuales;
     }
 
     public void setCartasActuales(ArrayList<Carta> cartasActuales) {
         this.cartasActuales = cartasActuales;
-    }
-
-    public ArrayList<Carta> getCartasJugadas() {
-        return cartasJugadas;
-    }
-
-    public void setCartasJugadas(ArrayList<Carta> cartasJugadas) {
-        this.cartasJugadas = cartasJugadas;
     }
 
     /**

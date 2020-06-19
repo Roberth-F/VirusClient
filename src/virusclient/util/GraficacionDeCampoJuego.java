@@ -18,12 +18,12 @@ public class GraficacionDeCampoJuego {
     public static void graficarEnCampoCaliente(List<VBox> campoJuego, Jugador jug, boolean tamannoCompleto) {
         campoJuego.forEach(vbox -> {
             vbox.getChildren().clear();
-            jug.getCartasJugadas().forEach(carta -> {
-                if (carta.getContainerId() == Integer.valueOf(vbox.getId())) {
+            jug.getCartasJugadas().forEach(listaC -> {
+                if (listaC.get(0).getContainerId() == Integer.valueOf(vbox.getId())) {
                     if (!tamannoCompleto) {
-                        carta.toSlowFormat();
+                        listaC.forEach(carta -> carta.toSlowFormat());
                     }
-                    vbox.getChildren().add(carta);
+                    vbox.getChildren().addAll(listaC);
                 }
             });
         });
