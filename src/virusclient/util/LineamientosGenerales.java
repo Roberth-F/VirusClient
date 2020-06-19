@@ -43,14 +43,14 @@ public class LineamientosGenerales {
 
     public static boolean puedeJugar(Carta carta, VBox container, List<List<Carta>> cartasEnMesa) {
         List<Carta> listaDeRevision = new ArrayList();
-        cartasEnMesa.forEach(pilaCartas ->{
+        cartasEnMesa.forEach(pilaCartas -> {
             listaDeRevision.add(pilaCartas.get(0));
         });
         if (enTurno && !botoCartas && !haJugado) {
             if (isOrganoEnCampoVacio(carta, container)) {
                 return !yaEsteOrganoEstaPuesto(listaDeRevision, carta);
             } else {
-                return false;
+                return aplicanLineamientosEspeciles(container, carta);
             }
         } else {
             return false;
@@ -90,6 +90,17 @@ public class LineamientosGenerales {
 
     public static boolean isJugando() {
         return haJugado;
+    }
+
+    public static boolean puedeAtacarAlEnemigo() {
+        return !haJugado && !botoCartas && enTurno;
+    }
+
+    public static boolean aplicanLineamientosEspeciles(VBox container, Carta cartaJugada) {
+        if ("Medicina".equals(cartaJugada.getTipo()) && !container.getChildren().isEmpty()) {
+            return LineamientosEspeciales.puedeUsarMedicina(cartaJugada, container);
+        }
+        return false;
     }
 
 }

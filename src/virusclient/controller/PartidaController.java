@@ -34,6 +34,7 @@ import virusclient.util.AppContext;
 import virusclient.util.ComunicadorConRespuesta;
 import virusclient.util.ComunicadorSinRespuesta;
 import virusclient.util.GraficacionDeCampoJuego;
+import virusclient.util.LineamientosEspeciales;
 import virusclient.util.MensajePopUp;
 
 /**
@@ -82,6 +83,7 @@ public class PartidaController extends Rechargeable implements Initializable {
     private final List<VBox> campoJuego = new ArrayList();
     private final List<VBox> campoEnemigo = new ArrayList();
     private final Jugador jugadorResidente = (Jugador) AppContext.getInstance().get("jugador");
+    private Jugador enemigoSeleccionado;
 
     /**
      * Initializes the controller class.
@@ -96,6 +98,7 @@ public class PartidaController extends Rechargeable implements Initializable {
         campoEnemigo.addAll(Arrays.asList(vbCartaEnemiga1, vbCartaEnemiga2, vbCartaEnemiga3, vbCartaEnemiga4, vbCartaEnemiga5));
         campoJuego.forEach(container -> container.setSpacing(-120));
         campoEnemigo.forEach(container -> container.setSpacing(-100));
+        activarEventosDragDropCampoEnemigo();
         this.cargarDatosJugador();
     }
 
@@ -178,6 +181,17 @@ public class PartidaController extends Rechargeable implements Initializable {
         });
     }
 
+    public void activarEventosDragDropCampoEnemigo() {
+        campoEnemigo.forEach(vbox -> {
+            vbox.setOnDragOver(event -> {
+                if (LineamientosEspeciales.puedeJugarAqui(cartaJugadaActual, vbox)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            });
+        });
+    }
+
     public void refrescarBarraDeContrincantes() {
         hBoxJugadores.getChildren().clear();
         listJugadores.forEach(jug -> {
@@ -187,6 +201,7 @@ public class PartidaController extends Rechargeable implements Initializable {
             labelPerfilContricante.setOnMouseClicked((MouseEvent event) -> {
                 labelContricante.setText(jug.getNombre());
                 labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar())));
+                enemigoSeleccionado = jug;
                 GraficacionDeCampoJuego.graficarEnCampoCaliente(campoEnemigo, jug, false);
             });
             hBoxJugadores.getChildren().add(labelPerfilContricante);
