@@ -169,11 +169,10 @@ public class PartidaController extends Rechargeable implements Initializable {
                 LineamientosGenerales.setJugando(true);
                 if (db.hasImage()) {
                     event.setDropCompleted(true);
-                    cartaJugadaActual.setContainerId(Integer.valueOf(act.getId()));
-                    jugadorResidente.ponerCartaEnLaMesa(cartaJugadaActual);
                     btnCambiarTurno.setDisable(true);
-                    act.getChildren().add(cartaJugadaActual);
                     cartaJugadaActual.setOnDragDetected(null);
+                    List<MarcoCarta> cartasDesecho = LineamientosGenerales.jugarEnEspacioPropio(act, cartaJugadaActual, jugadorResidente);
+                    desecharCartas(cartasDesecho);
                     enviarActualizacionDeJuego();
                 }
                 event.consume();
@@ -247,7 +246,7 @@ public class PartidaController extends Rechargeable implements Initializable {
             event.setDropCompleted(true);
             jugadorResidente.getCartasActuales().remove(cartaJugadaActual);
             MarcoCarta toDesecho = cartaJugadaActual.toLogicCart();
-            jugadorResidente.refrescarCartasLogias();
+            jugadorResidente.refrescarCartasLogicas();
             desecharCartas(Arrays.asList(toDesecho));
             refrescarBarraDeCartasPropias();
             enviarActualizacionDeJuego();
@@ -262,7 +261,9 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     public void desecharCartas(List<MarcoCarta> cartaList) {
-        new ComunicadorSinRespuesta().desecharCartas(cartaList);
+        if(!cartaList.isEmpty()){
+            new ComunicadorSinRespuesta().desecharCartas(cartaList);
+        }
     }
 
     @FXML

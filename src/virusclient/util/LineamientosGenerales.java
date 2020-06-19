@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.scene.layout.VBox;
 import virusclient.model.Carta;
 import virusclient.model.Jugador;
+import virusclient.model.MarcoCarta;
 
 /**
  *
@@ -101,6 +102,23 @@ public class LineamientosGenerales {
             return LineamientosEspeciales.puedeUsarMedicina(cartaJugada, container);
         }
         return false;
+    }
+
+    public static List<MarcoCarta> jugarEnEspacioPropio(VBox container, Carta cartaJugada, Jugador jugador) {
+        cartaJugada.setContainerId(Integer.valueOf(container.getId()));
+        jugador.ponerCartaEnLaMesa(cartaJugada);
+        container.getChildren().add(cartaJugada);
+        List<Carta> cartaList = new ArrayList(container.getChildren());
+        long numeroVirus = cartaList.stream().filter(carta -> "Virus".equals(carta.getTipo())).count();
+        cartaList.clear();
+        if (numeroVirus == 1) {
+            cartaList.add((Carta) container.getChildren().remove(container.getChildren().size() - 1));
+            cartaList.add((Carta) container.getChildren().remove(container.getChildren().size() - 1));
+        }
+        jugador.removeCartasJugadas(cartaList);
+        List<MarcoCarta> toReturn = new ArrayList();
+        cartaList.forEach(cart -> toReturn.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId())));
+        return toReturn;
     }
 
 }
