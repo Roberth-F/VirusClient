@@ -5,6 +5,7 @@
  */
 package virusclient.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.VBox;
 import virusclient.model.Carta;
@@ -40,10 +41,14 @@ public class LineamientosGenerales {
         return jugador.getCartasActuales().size() == 3;
     }
 
-    public static boolean puedeJugar(Carta carta, VBox container, List<Carta> cartasEnMesa) {
+    public static boolean puedeJugar(Carta carta, VBox container, List<List<Carta>> cartasEnMesa) {
+        List<Carta> listaDeRevision = new ArrayList();
+        cartasEnMesa.forEach(pilaCartas ->{
+            listaDeRevision.add(pilaCartas.get(0));
+        });
         if (enTurno && !botoCartas && !haJugado) {
             if (isOrganoEnCampoVacio(carta, container)) {
-                return !yaEsteOrganoEstaPuesto(cartasEnMesa, carta);
+                return !yaEsteOrganoEstaPuesto(listaDeRevision, carta);
             } else {
                 return false;
             }

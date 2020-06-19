@@ -133,10 +133,6 @@ public class PartidaController extends Rechargeable implements Initializable {
         listJugadores.forEach(jug -> jug.refrescarCartasVisuales(false));
         refrescarBarraDeCartasPropias();
         refrescarBarraDeContrincantes();
-        refrescarZonasDeGuerra();
-    }
-
-    private void refrescarZonasDeGuerra() {
         GraficacionDeCampoJuego.graficarEnCampoCaliente(campoJuego, jugadorResidente, true);
     }
 
