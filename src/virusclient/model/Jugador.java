@@ -53,8 +53,8 @@ public class Jugador {
             cartasJugadas.add(toAdd);
         });
     }
-    
-        public void refrescarCartasLogias() {
+
+    public void refrescarCartasLogicas() {
         cartasLogicasActuales.clear();
         cartasLogicasJugadas.clear();
         cartasActuales.forEach(cart -> {
@@ -79,10 +79,8 @@ public class Jugador {
         }
         List<Carta> listC = new ArrayList(Arrays.asList(cartaBuscada));
         cartasJugadas.add(listC);
-        refrescarCartasLogias();
+        refrescarCartasLogicas();
     }
-
-
 
     public String getNombre() {
         return Nombre;
@@ -140,7 +138,7 @@ public class Jugador {
     public void setCartasJugadas(ArrayList<List<Carta>> cartasJugadas) {
         this.cartasJugadas = cartasJugadas;
     }
-    
+
     public ArrayList<Carta> getCartasActuales() {
         return cartasActuales;
     }
@@ -178,6 +176,15 @@ public class Jugador {
             this.cartasLogicasActuales.addAll(jug.getCartasLogicasActuales());
             this.cartasLogicasJugadas.addAll(jug.getCartasLogicasJugadas());
         }
+    }
+
+    public void removeCartasJugadas(List<Carta> cartas) {
+        cartasJugadas.forEach(cList -> {
+            cartas.forEach(carta -> {
+                cList.removeIf(cart -> cart.getTipo().equals(carta.getTipo()) && cart.getContainerId() == carta.getContainerId());
+            });
+        });
+        refrescarCartasLogicas();
     }
 
 }

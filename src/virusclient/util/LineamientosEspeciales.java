@@ -37,9 +37,11 @@ public class LineamientosEspeciales {
         return cartaBase.getColor().equals(cartaJugada.getColor()) || "Multicolor".equals(cartaJugada.getColor());
     }
 
+    
     public static boolean puedeUsarMedicina(Carta cartaJugada, VBox puñoCartas) {
         List<Carta> cartaList = new ArrayList(puñoCartas.getChildren());
+        long numeroMedicinas = cartaList.stream().filter(carta -> "Medicina".equals(carta.getTipo())).count();
         Carta cartaBase = cartaList.get(0);
-        return cartaBase.getColor().equals(cartaJugada.getColor()) || "Multicolor".equals(cartaJugada.getColor());
+        return (cartaBase.getColor().equals(cartaJugada.getColor()) || "Multicolor".equals(cartaJugada.getColor())) && numeroMedicinas < 2;
     }
 }
