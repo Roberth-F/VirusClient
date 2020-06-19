@@ -5,34 +5,62 @@
  */
 package virusclient.model;
 
-import com.google.gson.annotations.SerializedName;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
  *
- * @author rober
+ * @author roberth 😊
  */
 public class Carta extends ImageView {
- 
-    @SerializedName("tipoCarta")
-    String tipoCarta;
-    @SerializedName("color")
-    String color;
-      private String getColor(){
-    return  color;
-   }
-    public Carta(String tipo,String color){
-     this.color=color;
-     this.tipoCarta=tipo; 
+
+    private String tipoCarta;
+    private String color;
+    private int containerId;
+
+    public Carta(String tipo, String color, boolean cartasTamañoCompleto, int containerId) {
+        this.color = color;
+        this.tipoCarta = tipo;
+        this.containerId = containerId;
+        if ("Sincolor".equals(color)) {
+            this.setImage(new Image("virusclient/resources/cartas/" + tipo + ".png"));
+        } else {
+            this.setImage(new Image("virusclient/resources/cartas/" + tipo + color + ".png"));
+        }
+        this.setFitHeight(cartasTamañoCompleto ? 140 : 110);
+        this.setFitWidth(cartasTamañoCompleto ? 110 : 85);
     }
 
-   private String getTipo(){
-    return  tipoCarta;
-   }
+    public String getColor() {
+        return color;
+    }
 
+    public String getTipo() {
+        return tipoCarta;
+    }
+
+    public void setTipoCarta(String tipoCarta) {
+        this.tipoCarta = tipoCarta;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public MarcoCarta toLogicCart() {
+        return new MarcoCarta(this.tipoCarta, this.color, this.containerId);
+    }
+
+    public int getContainerId() {
+        return containerId;
+    }
+
+    public void setContainerId(int containerId) {
+        this.containerId = containerId;
+    }
     
-    
-    
-    //AQUI ES LALO
-   
+    public void toSlowFormat(){
+        this.setFitHeight(110);
+        this.setFitWidth(85);
+    }
 }

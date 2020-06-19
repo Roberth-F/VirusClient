@@ -25,7 +25,9 @@ import virusclient.model.Peticion;
  * @author Roberth 😊
  */
 public class ComunicadorConRespuesta {
+
     private final String serverIp = (String) AppContext.getInstance().get("ServerIP");
+
     /**
      * Intenta unir al jugador a la partida actual en caso de existir una en el
      * servidor y el juego no halla iniciado aun.
@@ -169,7 +171,8 @@ public class ComunicadorConRespuesta {
             return new Respuesta(false, "Ha ocurrido un error inesperado");
         }
     }
-        public MarcoCarta solicitarCarta() {
+
+    public MarcoCarta solicitarCarta() {
         try {
             ServerSocket servSock = new ServerSocket(0);
             Thread enviardor = new Thread(() -> {  //Envia petición a servidor.
@@ -179,7 +182,6 @@ public class ComunicadorConRespuesta {
                     DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
                     Peticion pet = new Peticion();
                     pet.solicitarCarta(servSock.getLocalPort());
-                    //   pet.addActualizacion(jugadores, servSock.getLocalPort());
                     String Json = new Gson().toJson(pet);
                     datos.writeUTF(Json);
                     sock.getOutputStream().close();
@@ -196,7 +198,7 @@ public class ComunicadorConRespuesta {
             DataInputStream informacion = new DataInputStream(canalComunic.getInputStream());
             String Json = informacion.readUTF();
             // Respuesta resp = new Gson().fromJson(Json, Respuesta.class);
-            MarcoCarta cart = new Gson().fromJson(Json,MarcoCarta.class);
+            MarcoCarta cart = new Gson().fromJson(Json, MarcoCarta.class);
             canalComunic.getInputStream().close();
             informacion.close();
             canalComunic.close();
@@ -204,10 +206,10 @@ public class ComunicadorConRespuesta {
             return cart;
         } catch (UnknownHostException UE) {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, UE);
-            return new MarcoCarta("","");
+            return null;
         } catch (IOException IO) {
             Logger.getLogger(ComunicadorConRespuesta.class.getName()).log(Level.SEVERE, null, IO);
-            return  new MarcoCarta("","");
+            return null;
         }
     }
 }

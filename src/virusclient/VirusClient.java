@@ -5,6 +5,7 @@
  */
 package virusclient;
 
+import com.google.gson.Gson;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
@@ -32,6 +33,7 @@ public class VirusClient extends Application {
 
     @Override
     public void start(Stage stage) {
+        stage.setTitle("Covid-18");
         TbxControl.getInstance().startControl(stage, null, null);
         TbxControl.getInstance().onAppClosing(event -> {
             new ComunicadorSinRespuesta().solicitarSalida();
