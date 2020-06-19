@@ -189,6 +189,21 @@ public class PartidaController extends Rechargeable implements Initializable {
                 event.consume();
             });
         });
+        campoEnemigo.forEach(vbox -> {
+            vbox.setOnDragDropped(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasImage()) {
+                    LineamientosGenerales.setJugando(true);
+                    event.setDropCompleted(true);
+                    btnCambiarTurno.setDisable(true);
+                    cartaJugadaActual.setOnDragDetected(null);
+                    List<MarcoCarta> cartasDesecho = LineamientosEspeciales.jugarEnCampoEnemigo(vbox, cartaJugadaActual, jugadorResidente, enemigoSeleccionado);
+                    desecharCartas(cartasDesecho);
+                    enviarActualizacionDeJuego();
+                    event.consume();
+                }
+            });
+        });
     }
 
     public void refrescarBarraDeContrincantes() {
@@ -261,7 +276,7 @@ public class PartidaController extends Rechargeable implements Initializable {
     }
 
     public void desecharCartas(List<MarcoCarta> cartaList) {
-        if(!cartaList.isEmpty()){
+        if (!cartaList.isEmpty()) {
             new ComunicadorSinRespuesta().desecharCartas(cartaList);
         }
     }

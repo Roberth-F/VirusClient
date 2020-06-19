@@ -81,6 +81,21 @@ public class Jugador {
         cartasJugadas.add(listC);
         refrescarCartasLogicas();
     }
+    
+    public void removerCartaDeMano(Carta carta){
+        cartasActuales.remove(carta);
+        refrescarCartasLogicas();
+    }
+
+    public void recibirCartaEnemiga(Carta carta) {
+        for (List<Carta> lisC : cartasJugadas) {
+            if (lisC.get(0).getContainerId() == carta.getContainerId()) {
+                lisC.add(carta);
+                refrescarCartasLogicas();
+                return;
+            }
+        }
+    }
 
     public String getNombre() {
         return Nombre;
@@ -168,7 +183,7 @@ public class Jugador {
         jug.remove(toReturn);
         return toReturn;
     }
-
+    
     public void copyCarts(Jugador jug) {
         if (jug.getNombre().equals(this.getNombre())) {
             this.cartasLogicasActuales.clear();
