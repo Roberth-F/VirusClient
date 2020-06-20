@@ -19,15 +19,18 @@ public class MarcoCarta {
     private int containerId;
     @SerializedName("color")
     String color;
+    @SerializedName("posicion")
+    private int posicion;
 
     public String getColor() {
         return color;
     }
 
-    public MarcoCarta(String tipo, String color, int containerId) {
+    public MarcoCarta(String tipo, String color, int containerId, int poscion) {
         this.color = color;
         this.tipo = tipo;
         this.containerId = containerId;
+        this.posicion = poscion;
     }
 
     public void setContainerId(int numeroCarta) {
@@ -48,7 +51,15 @@ public class MarcoCarta {
     }
 
     public Carta toVisualCart(boolean tamannoCompleto) {
-        return new Carta(this.tipo, this.color, tamannoCompleto, this.containerId);
+        return new Carta(this.tipo, this.color, tamannoCompleto, this.containerId, this.posicion);
     }
 
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
+    }
+    
 }

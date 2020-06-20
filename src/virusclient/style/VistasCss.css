@@ -42,15 +42,15 @@ and open the template in the editor.
     -fx-border-radius:10;
     -fx-background-radius: 10px;
     -fx-font: bold 9pt "Bahnschrift" ;
-/*    -fx-pref-height: 60px;          Es problemático tener un tamaño definido para todos los bonotes en general.
-    -fx-pref-width: 200px; */ 
+    /*    -fx-pref-height: 60px;          Es problemático tener un tamaño definido para todos los bonotes en general.
+        -fx-pref-width: 200px; */ 
     -fx-border-color: black;
 
 
 }
 .contenedorMsj{
 
-     -fx-text-fill: whitesmoke;
+    -fx-text-fill: whitesmoke;
     -fx-background-color: red;
     -fx-border-radius:10;
     -fx-background-radius: 10px;
@@ -61,13 +61,7 @@ and open the template in the editor.
     -fx-background-color: -fx-backG-button-color-hover;
 
 }
-/*.label{
-    -fx-text-fill:whitesmoke;
-    -fx-background-color: linear-gradient(  #1831DC 1%,  black 95%);
-    -fx-border-radius: 10px;
-    -fx-background-radius: 10px;
 
-}*/
 .TextField:hover{
     -fx-background-color: linear-gradient(   #21b4e2 1%,  black 95%);/* #999999 2%,  black 95%*/
 
@@ -93,4 +87,36 @@ and open the template in the editor.
 
 #desecho{
     -fx-image:url("../resources/cartas/Desecho.png");
+}
+
+.barraDeContrincantes > Label{
+    -fx-text-fill: white;
+    -fx-background-color: #455A64;
+    -fx-border-radius:5px;
+    -fx-background-radius: 5px;
+    -fx-font: bold 12pt "Bahnschrift" ;
+}
+
+.barraDeContrincantes > Label:hover{
+    -fx-background-color: #521200;
+    -fx-border-radius:5px;
+    -fx-background-radius: 5px;
+    -fx-font: bold 12pt "Bahnschrift" ;
+}
+
+#identificadorEnJuego{
+    -fx-font: bold 12pt "Bahnschrift" ;
+}
+
+#panelGanador{
+    -fx-background-color :#4A148C;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 60, 0.3, 0, 0.9);
+}
+
+#panelGanador  Label{
+    -fx-text-fill: white;
+    -fx-border-radius:5px;
+    -fx-background-radius: 5px;
+    -fx-font: bold 20pt "Bahnschrift" ;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,1), 10, 0.2, 0, 0);
 }

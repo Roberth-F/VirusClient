@@ -60,7 +60,7 @@ public class LineamientosEspeciales {
         }
         enemigo.removeCartasJugadas(cartaList);
         List<MarcoCarta> toReturn = new ArrayList();
-        cartaList.forEach(cart -> toReturn.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId())));
+        cartaList.forEach(cart -> toReturn.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId(), cart.getPosicion())));
         return toReturn;
     }
 

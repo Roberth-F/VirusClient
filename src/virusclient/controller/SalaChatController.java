@@ -5,7 +5,6 @@
  */
 package virusclient.controller;
 
-import java.awt.Panel;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javax.swing.text.AbstractDocument;
-import unaplanilla2.util.Mensaje;
+import virusclient.util.Mensaje;
 import virusclient.model.Actualizacion;
 import virusclient.model.ChatGlobal;
 import virusclient.model.Jugador;
@@ -46,7 +43,7 @@ public class SalaChatController implements Initializable {
     private TextField txtMensaje;
     @FXML
     private VBox vboxContenedor;
-    List<ChatGlobal> chat = new ArrayList<ChatGlobal>();
+    private List<ChatGlobal> chat = new ArrayList();
 
     @FXML
     private ImageView fo;
@@ -61,29 +58,25 @@ public class SalaChatController implements Initializable {
         root.setOnMouseClicked(event -> event.consume());
 
         new ComunicadorSinRespuesta().ActualizarMensajes(chat);
-//        fo.setFitHeight(400);
-//        fo.setFitWidth(200);
-//        fo.fitHeightProperty().bind(root.heightProperty());
-//        fo.fitWidthProperty().bind(root.widthProperty());
     }
 
     @FXML
     private void enviarOnAction(ActionEvent event) {
         Jugador actual = (Jugador) AppContext.getInstance().get("jugador");
-        if(txtMensaje.getText().length()<40){
-        if (txtMensaje.getText().length() != 0) {
-            ChatGlobal CHA = new ChatGlobal(actual.getNombre(), txtMensaje.getText());
-            chat.add(CHA);
-            if (chat.size() == 20) {
-                chat.remove(0);
-            }
-            new ComunicadorSinRespuesta().ActualizarMensajes(chat);
-            txtMensaje.clear();
+        if (txtMensaje.getText().length() < 40) {
+            if (txtMensaje.getText().length() != 0) {
+                ChatGlobal CHA = new ChatGlobal(actual.getNombre(), txtMensaje.getText());
+                chat.add(CHA);
+                if (chat.size() == 20) {
+                    chat.remove(0);
+                }
+                new ComunicadorSinRespuesta().ActualizarMensajes(chat);
+                txtMensaje.clear();
 
-        }
-    }else{
-        Mensaje m=new Mensaje();
-        m.show(Alert.AlertType.WARNING,"Mensaje","Cantidad de caracteres sobrepasada");
+            }
+        } else {
+            Mensaje m = new Mensaje();
+            m.show(Alert.AlertType.WARNING, "Mensaje", "Cantidad de caracteres sobrepasada");
         }
     }
 
@@ -99,13 +92,13 @@ public class SalaChatController implements Initializable {
                     + "    -fx-background-radius: 10px;\n"
                     + "    -fx-font: bold 9pt \"Bahnschrift\" ;\n"
                     + "    -fx-border-color: black;");
-            Label emisor= new Label();
-             emisor.setStyle("     -fx-text-fill:white;");
+            Label emisor = new Label();
+            emisor.setStyle("     -fx-text-fill:white;");
             emisor.setText(chatN.getEmisor() + ":");
             contenedorMsj.getChildren().add(emisor);
-            Label msj= new Label();
-             msj.setStyle("     -fx-text-fill:black;");
-             msj.setText(chatN.getMensaje());
+            Label msj = new Label();
+            msj.setStyle("     -fx-text-fill:black;");
+            msj.setText(chatN.getMensaje());
             contenedorMsj.getChildren().add(msj);
 
             vboxContenedor.getChildren().add(contenedorMsj);

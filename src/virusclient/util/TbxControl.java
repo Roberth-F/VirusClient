@@ -187,7 +187,7 @@ public class TbxControl {
         TbxControl.idioma = idioma;
     }
 
-    public void reset() {
+    public void resetCache() {
         TbxControl.TREE.clear();
     }
 

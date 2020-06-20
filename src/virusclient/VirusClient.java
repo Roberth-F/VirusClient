@@ -5,7 +5,6 @@
  */
 package virusclient;
 
-import com.google.gson.Gson;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;

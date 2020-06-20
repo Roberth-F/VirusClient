@@ -27,10 +27,11 @@ public class Actualizacion {
     private String listaJugadores;
     @SerializedName("refresher")
     private List<Jugador> refresherList;
-
+    @SerializedName("Ganador")
+    private Jugador ganador;
     @SerializedName("nuevosMensajes")
     private String listaMensajes;
-    private String listaJugadores2;
+
     /**
      * Prepara una actualización de lista de jugadores.
      *
@@ -47,12 +48,14 @@ public class Actualizacion {
         List listaJugadoresUnidos = new Gson().fromJson(listaJugadores, typeListJug);
         return listaJugadoresUnidos;
     }
+
     public List<ChatGlobal> getlistaMensajes() {
         Type typeListJug = new TypeToken<List<ChatGlobal>>() {
         }.getType();
         List listachat = new Gson().fromJson(listaMensajes, typeListJug);
         return listachat;
     }
+
     /**
      * Genera actualizacion con orden de detener el escuchador del juego.
      */
@@ -84,4 +87,7 @@ public class Actualizacion {
         this.refresherList = refresherList;
     }
 
+    public Jugador getGanador() {
+        return ganador;
+    }
 }

@@ -43,12 +43,12 @@ public class Jugador {
         cartasActuales.clear();
         cartasJugadas.clear();
         cartasLogicasActuales.forEach(act -> {
-            cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto, act.getContainerId()));
+            cartasActuales.add(new Carta(act.getTipo(), act.getColor(), cartasTamañoCompleto, act.getContainerId(), act.getPosicion()));
         });
         cartasLogicasJugadas.forEach(list -> {
             List<Carta> toAdd = new ArrayList();
             list.forEach(cart -> {
-                toAdd.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto, cart.getContainerId()));
+                toAdd.add(new Carta(cart.getTipo(), cart.getColor(), cartasTamañoCompleto, cart.getContainerId(), cart.getPosicion()));
             });
             cartasJugadas.add(toAdd);
         });
@@ -58,12 +58,12 @@ public class Jugador {
         cartasLogicasActuales.clear();
         cartasLogicasJugadas.clear();
         cartasActuales.forEach(cart -> {
-            cartasLogicasActuales.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
+            cartasLogicasActuales.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId(), cart.getPosicion()));
         });
         cartasJugadas.forEach(list -> {
             List<MarcoCarta> toAdd = new ArrayList();
             list.forEach(cart -> {
-                toAdd.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId()));
+                toAdd.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId(), cart.getPosicion()));
             });
             cartasLogicasJugadas.add(toAdd);
         });
@@ -81,8 +81,8 @@ public class Jugador {
         cartasJugadas.add(listC);
         refrescarCartasLogicas();
     }
-    
-    public void removerCartaDeMano(Carta carta){
+
+    public void removerCartaDeMano(Carta carta) {
         cartasActuales.remove(carta);
         refrescarCartasLogicas();
     }
@@ -183,7 +183,7 @@ public class Jugador {
         jug.remove(toReturn);
         return toReturn;
     }
-    
+
     public void copyCarts(Jugador jug) {
         if (jug.getNombre().equals(this.getNombre())) {
             this.cartasLogicasActuales.clear();

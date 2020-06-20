@@ -17,8 +17,10 @@ public class Carta extends ImageView {
     private String tipoCarta;
     private String color;
     private int containerId;
+    private int posicion;
 
-    public Carta(String tipo, String color, boolean cartasTamañoCompleto, int containerId) {
+    public Carta(String tipo, String color, boolean cartasTamañoCompleto, int containerId, int posicion) {
+        this.posicion = posicion;
         this.color = color;
         this.tipoCarta = tipo;
         this.containerId = containerId;
@@ -48,7 +50,7 @@ public class Carta extends ImageView {
     }
 
     public MarcoCarta toLogicCart() {
-        return new MarcoCarta(this.tipoCarta, this.color, this.containerId);
+        return new MarcoCarta(this.tipoCarta, this.color, this.containerId, this.posicion);
     }
 
     public int getContainerId() {
@@ -58,9 +60,18 @@ public class Carta extends ImageView {
     public void setContainerId(int containerId) {
         this.containerId = containerId;
     }
-    
-    public void toSlowFormat(){
+
+    public void toSlowFormat() {
         this.setFitHeight(110);
         this.setFitWidth(85);
     }
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
+    }
+    
 }

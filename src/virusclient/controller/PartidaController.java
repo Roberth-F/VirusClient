@@ -36,6 +36,7 @@ import virusclient.util.ComunicadorSinRespuesta;
 import virusclient.util.GraficacionDeCampoJuego;
 import virusclient.util.LineamientosEspeciales;
 import virusclient.util.MensajePopUp;
+import virusclient.util.TbxControl;
 
 /**
  * FXML Controller class
@@ -84,6 +85,8 @@ public class PartidaController extends Rechargeable implements Initializable {
     private final List<VBox> campoEnemigo = new ArrayList();
     private final Jugador jugadorResidente = (Jugador) AppContext.getInstance().get("jugador");
     private Jugador enemigoSeleccionado;
+    @FXML
+    private Label lblIdentificadorEnJuego;
 
     /**
      * Initializes the controller class.
@@ -145,7 +148,7 @@ public class PartidaController extends Rechargeable implements Initializable {
             vBoxCartas.getChildren().add(carta);
         });
         vBoxCartas.getChildren().forEach(cart -> {
-            cart.setOnDragDetected((MouseEvent event) -> {
+            cart.setOnDragDetected((event) -> {
                 cartaJugadaActual = (Carta) cart;
                 Dragboard db = cart.startDragAndDrop(TransferMode.MOVE);
                 ClipboardContent content = new ClipboardContent();
@@ -213,7 +216,9 @@ public class PartidaController extends Rechargeable implements Initializable {
             Label labelPerfilContricante = new Label(jug.getNombre());
             labelPerfilContricante.setGraphic(perfilJugador1);
             labelPerfilContricante.setOnMouseClicked((MouseEvent event) -> {
-                labelContricante.setText(jug.getNombre());
+                hBoxJugadores.getChildren().forEach(label -> label.setStyle("-fx-background-color: #455A64"));
+                labelPerfilContricante.setStyle("-fx-background-color: #521200");
+                labelContricante.setText(jug.getNombre() + "(Enemigo)");
                 labelContricante.setGraphic(new ImageView(new Image("virusclient/resources/imagenesAvatar/" + jug.getNombAvatar())));
                 enemigoSeleccionado = jug;
                 GraficacionDeCampoJuego.graficarEnCampoCaliente(campoEnemigo, jug, false);
@@ -224,11 +229,9 @@ public class PartidaController extends Rechargeable implements Initializable {
 
     public void cargarDatosJugador() {
         ImageView perfilJugador = new ImageView();
-        Label nombre = new Label();
-        nombre.setText(jugadorResidente.getNombre());
+        lblIdentificadorEnJuego.setText(jugadorResidente.getNombre());
         perfilJugador.setImage(new Image("virusclient/resources/imagenesAvatar/" + jugadorResidente.getNombAvatar()));
-        nombre.setGraphic(perfilJugador);
-        panelPropio.getChildren().add(nombre);
+        lblIdentificadorEnJuego.setGraphic(perfilJugador);
     }
 
     @FXML
@@ -294,5 +297,11 @@ public class PartidaController extends Rechargeable implements Initializable {
         updateLis.addAll(listJugadores);
         updateLis.add(jugadorResidente);
         new ComunicadorSinRespuesta().actualizarContrincantes(updateLis);
+    }
+
+    public void declararGanador(Actualizacion act) {
+        AppContext.getInstance().set("ganador", act.getGanador());
+        AppContext.getInstance().delete("jugador");
+        TbxControl.getInstance().view("SalaDeGanador");
     }
 }

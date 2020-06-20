@@ -110,14 +110,18 @@ public class LineamientosGenerales {
         container.getChildren().add(cartaJugada);
         List<Carta> cartaList = new ArrayList(container.getChildren());
         long numeroVirus = cartaList.stream().filter(carta -> "Virus".equals(carta.getTipo())).count();
+        long numeroMedicinas = cartaList.stream().filter(carta -> "Medicina".equals(carta.getTipo())).count();
         cartaList.clear();
         if (numeroVirus == 1) {
             cartaList.add((Carta) container.getChildren().remove(container.getChildren().size() - 1));
             cartaList.add((Carta) container.getChildren().remove(container.getChildren().size() - 1));
+        }else if(numeroMedicinas == 2){
+            cartaJugada.setPosicion(90);
+            cartaJugada.setRotate(90);
         }
         jugador.removeCartasJugadas(cartaList);
         List<MarcoCarta> toReturn = new ArrayList();
-        cartaList.forEach(cart -> toReturn.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId())));
+        cartaList.forEach(cart -> toReturn.add(new MarcoCarta(cart.getTipo(), cart.getColor(), cart.getContainerId(), cart.getPosicion())));
         return toReturn;
     }
 

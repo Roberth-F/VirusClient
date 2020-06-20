@@ -95,8 +95,6 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
                         AppContext.getInstance().set("nuevosJugadores", null);
                     }
                 }
-                //if extra para cambio de pantalla
-                //TbxControl.getInstance().view("");
                 if ((AppContext.getInstance().get("cargarPartida")) != null) {
 
                     System.out.println("entre");
@@ -132,7 +130,6 @@ public class SalaDeEsperaController extends Rechargeable implements Initializabl
         Platform.runLater(() -> {
             jugadores.getChildren().removeIf(titulo -> ((Label) titulo).getText().equals(((Jugador) AppContext.getInstance().get("jugador")).getNombre()));
         });
-
     }
 
     @Override

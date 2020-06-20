@@ -21,7 +21,10 @@ public class GraficacionDeCampoJuego {
             jug.getCartasJugadas().forEach(listaC -> {
                 if (listaC.get(0).getContainerId() == Integer.valueOf(vbox.getId())) {
                     if (!tamannoCompleto) {
-                        listaC.forEach(carta -> carta.toSlowFormat());
+                        listaC.forEach(carta -> {
+                            carta.toSlowFormat();
+                            carta.setRotate(carta.getPosicion());
+                        });
                     }
                     vbox.getChildren().addAll(listaC);
                 }
