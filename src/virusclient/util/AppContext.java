@@ -36,6 +36,7 @@ public class AppContext {
             appProperties.load(VirusClient.class.getResourceAsStream("/configuration/RedConfig.ini"));
             if (appProperties.getProperty("serverIP") != null) {
                 this.set("ServerIP", appProperties.getProperty("serverIP"));
+                this.set("selfIp", appProperties.getProperty("selfIp"));
             }
         } catch (IOException io) {
             System.out.println("Archivo de configuración de red no encontrado.");

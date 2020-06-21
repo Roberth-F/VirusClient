@@ -28,7 +28,8 @@ public class Escuchador {
 
     public Escuchador() {
         try {
-            this.serverSocket = new ServerSocket(0);
+            String ip = (String) AppContext.getInstance().get("selfIp");
+            this.serverSocket = new ServerSocket(0,1000000, InetAddress.getByName(ip));
             AppContext.getInstance().set("mainPort", serverSocket.getLocalPort());
         } catch (IOException IO) {
             System.err.println("NO SE PUDO HABILITAR PUERTO INICIAL DE ESCUCHA");
@@ -56,7 +57,7 @@ public class Escuchador {
 
     public void detener() {
         try {
-            Socket sock = new Socket(InetAddress.getLocalHost().getHostAddress(), (int) AppContext.getInstance().get("mainPort"));
+            Socket sock = new Socket((String) AppContext.getInstance().get("selfIp"), (int) AppContext.getInstance().get("mainPort"));
             DataOutputStream datos = new DataOutputStream(sock.getOutputStream());
             Actualizacion actStop = new Actualizacion();
             actStop.toStop();

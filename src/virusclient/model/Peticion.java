@@ -6,11 +6,7 @@
 package virusclient.model;
 
 import com.google.gson.annotations.SerializedName;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import virusclient.util.AppContext;
 
 /**
@@ -41,8 +37,9 @@ public class Peticion {
     @SerializedName("cartasDesecho")
     private List<MarcoCarta> castasDesecho;
 
-@SerializedName("chat")
+    @SerializedName("chat")
     private List<ChatGlobal> chat;
+
     public Peticion() {
     }
 
@@ -62,12 +59,7 @@ public class Peticion {
      *
      */
     public void addToGame(String ServMethod, int puertoEspera, String nombreJugador, int puertoImediato, String avatar) {
-        try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException UE) {
-            System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
-            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
-        }
+        this.ip = (String) AppContext.getInstance().get("selfIp");
         this.puerto = puertoEspera;
         this.metodo = ServMethod;
         this.nombreJugador = nombreJugador;
@@ -94,13 +86,9 @@ public class Peticion {
      * retirando de la partida actual.
      */
     public void peticionSalida() {
-        try {
-            this.metodo = "desconectarJugador";
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-            this.puerto = (int) AppContext.getInstance().get("mainPort");
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.metodo = "desconectarJugador";
+        this.ip = (String) AppContext.getInstance().get("selfIp");
+        this.puerto = (int) AppContext.getInstance().get("mainPort");
     }
 
     /**
@@ -110,11 +98,7 @@ public class Peticion {
      * servidor.
      */
     public void startGame(int puertoImediato) {
-        try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.ip = (String) AppContext.getInstance().get("selfIp");
         this.puertoImadiato = puertoImediato;
         this.metodo = "startGame";
     }
@@ -126,9 +110,11 @@ public class Peticion {
     public void peticionDeJuego() {
         this.metodo = "forzarInicio";
     }
-     public void peticionChat() {
+
+    public void peticionChat() {
         this.metodo = "forzarChat";
     }
+
     /**
      * Obtiene nombre del método que desea ser llamado
      *
@@ -223,34 +209,20 @@ public class Peticion {
         this.metodo = "actualizarContrincantes";
         this.jugadores = jugadores;
         this.puerto = (int) AppContext.getInstance().get("mainPort");
-        try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException UE) {
-            System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
-            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
-        }
+        this.ip = (String) AppContext.getInstance().get("selfIp");
         this.nombreJugador = jugadores.get(jugadores.size() - 1).getNombre(); //Carga nombre de jugador que envía la petición.
     }
-        public void addActualizacionMensaje(List<ChatGlobal>chat) {
-        try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException UE) {
-            System.err.println("ERROR OBTENIENDO DIRECCIÓN IP DEL EQUIPO");
-            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, UE.getMessage(), UE);
-        }
-  
+
+    public void addActualizacionMensaje(List<ChatGlobal> chat) {
+        this.ip = this.ip = (String) AppContext.getInstance().get("selfIp");
         this.metodo = "actualizarMensaje";
-        this.chat =chat;
-       // this.puertoImadiato = puertoImediato;
-        
+        this.chat = chat;
+        // this.puertoImadiato = puertoImediato;
+
     }
 
     public void solicitarCarta(int puertoImediato) {
-        try {
-            this.ip = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(Peticion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.ip = this.ip = (String) AppContext.getInstance().get("selfIp");
         this.puertoImadiato = puertoImediato;
         this.metodo = "solicitarCarta";
     }
